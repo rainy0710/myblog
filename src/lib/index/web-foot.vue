@@ -1,3 +1,3 @@
 <template>
-    <div>网页主体</div>
+    <div>网页底部</div>
 </template>

@@ -3,6 +3,9 @@
         <h1>
             <a href="/index.html" target="_self">R.Z's Blog</a>
         </h1>
+        <ul class="nav">
+            <li></li>
+        </ul>
     </div>
 </template>
 
