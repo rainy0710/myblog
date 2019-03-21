@@ -1,0 +1,25 @@
+{
+  "name": "myblog",
+  "version": "1.0.0",
+  "description": "This is Rainy's first blog project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainy0710/myblog.git"
+  },
+  "author": "Rainy Zhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rainy0710/myblog/issues"
+  },
+  "homepage": "https://github.com/rainy0710/myblog#readme",
+  "dependencies": {
+    "vue": "^2.6.10",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^3.6.0"
+  }
+}
