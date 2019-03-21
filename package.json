@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/rainy0710/myblog#readme",
   "dependencies": {
+    "css-loader": "^2.1.1",
+    "express": "^4.16.4",
+    "style-loader": "^0.23.1",
     "vue": "^2.6.10",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.10",

@@ -3,7 +3,7 @@ const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
-    entry: path.join(__dirname, '/src/main.js'),
+    entry: path.join(__dirname, '/src/index.js'),
     output: {
         path: path.join(__dirname, '/dist/'),
         filename: 'bundle.js'
@@ -14,6 +14,11 @@ module.exports = {
             {
                 test: /\.vue$/,
                 use: 'vue-loader'
+            },
+            //使用css-loader去解析css文件
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
             }
         ]
     },

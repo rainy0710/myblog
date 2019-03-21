@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import app from './app.vue'
+import web from './web.vue'
 
 var vm = new Vue({
     el: '#app',
-    render: c => c(app)
+    render: c => c(web)
 })
