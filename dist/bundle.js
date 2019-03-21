@@ -756,6 +756,8 @@ module.exports = g;
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     
@@ -13604,6 +13606,10 @@ var staticRenderFns = [
       _c("ul", { staticClass: "nav" }, [
         _c("li", [_vm._v("搜索")]),
         _vm._v(" "),
+        _c("li", [_vm._v("首页")]),
+        _vm._v(" "),
+        _c("li", [_vm._v("博文")]),
+        _vm._v(" "),
         _c("li", [_vm._v("社区")]),
         _vm._v(" "),
         _c("li", [_vm._v("用户")])
@@ -13631,7 +13637,7 @@ render._withStripped = true
 
 exports = module.exports = __webpack_require__(0)(false);
 // Module
-exports.push([module.i, "\ndiv.box[data-v-36248db9]{\r\n    position: fixed;\r\n    top: 0;\r\n    width: 100%;\r\n    height: 50px;\r\n    box-shadow: 0 0 1px 3px #aaa;\r\n    background-color: white;\n}\nh1[data-v-36248db9]{\r\n    position: absolute;\r\n    left: 10%;\r\n    width: 200px;\r\n    height: 100%;\r\n    font-size: 36px;\r\n    line-height: 50px;\r\n    font-family: 'Cooper Black','Arial','Microsoft YaHei';\r\n    /* background-color: yellow; */\n}\nh1 a[data-v-36248db9]{\r\n    color: black;\r\n    text-decoration: none;\n}\nul.nav[data-v-36248db9]{\r\n    display: flex;\r\n    justify-content: space-between;\r\n    position: absolute;\r\n    right: 10%;\r\n    width: 20%;\r\n    list-style: none;\r\n    height: 100%;\r\n    /* background-color: blue; */\n}\nul.nav li[data-v-36248db9]{\r\n    display: inline-block;\r\n    height: 100%;\r\n    width: 60px;\r\n    line-height: 50px;\r\n    text-align: right;\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n    letter-spacing: 5px; \r\n    color: #666;\r\n    /* background-color: red; */\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\ndiv.box[data-v-36248db9]{\r\n    position: fixed;\r\n    top: 0;\r\n    width: 100%;\r\n    height: 50px;\r\n    box-shadow: 0 0 1px 3px #aaa;\r\n    background-color: white;\n}\nh1[data-v-36248db9]{\r\n    position: absolute;\r\n    left: 10%;\r\n    width: 200px;\r\n    height: 100%;\r\n    font-size: 36px;\r\n    line-height: 50px;\r\n    font-family: 'Cooper Black','Arial','Microsoft YaHei';\r\n    /* background-color: yellow; */\n}\nh1 a[data-v-36248db9]{\r\n    color: black;\r\n    text-decoration: none;\n}\nul.nav[data-v-36248db9]{\r\n    display: flex;\r\n    justify-content: space-between;\r\n    position: absolute;\r\n    right: 10%;\r\n    width: 25%;\r\n    list-style: none;\r\n    height: 100%;\r\n    /* background-color: blue; */\n}\nul.nav li[data-v-36248db9]{\r\n    display: inline-block;\r\n    height: 100%;\r\n    width: 60px;\r\n    line-height: 50px;\r\n    text-align: right;\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n    letter-spacing: 5px; \r\n    color: #666;\r\n    /* background-color: red; */\n}\r\n\r\n\r\n", ""]);
 
 
 

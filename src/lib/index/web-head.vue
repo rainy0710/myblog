@@ -5,6 +5,8 @@
         </h1>
         <ul class="nav">
             <li>搜索</li>
+            <li>首页</li>
+            <li>博文</li>
             <li>社区</li>
             <li>用户</li>
         </ul>
@@ -48,7 +50,7 @@ ul.nav{
     justify-content: space-between;
     position: absolute;
     right: 10%;
-    width: 20%;
+    width: 25%;
     list-style: none;
     height: 100%;
     /* background-color: blue; */
