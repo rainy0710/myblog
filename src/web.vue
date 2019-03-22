@@ -4,6 +4,7 @@
         <web-head></web-head>
         <web-body></web-body>
         <web-foot></web-foot>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -11,6 +12,7 @@
 import head from './lib/index/web-head.vue'
 import body from './lib/index/web-body.vue'
 import foot from './lib/index/web-foot.vue'
+import login from './lib/index/login.vue'
 
 export default {
     components: {

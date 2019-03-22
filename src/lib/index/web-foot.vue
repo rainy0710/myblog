@@ -1,5 +1,5 @@
 <template>
-    <div class="box">网页底部</div>
+    <div class="box">Copyright &copy; Rainy Zhang</div>
 </template>
 
 <script>
@@ -10,7 +10,10 @@ export default {
 
 <style scoped>
 div.box{
-    height: 300px;
-    background-color: blue;
+    height: 150px;
+    text-align: center;
+    line-height: 150px;
+    color: #222;
+    background-color: grey;
 }
 </style>

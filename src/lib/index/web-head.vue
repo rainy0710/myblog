@@ -4,11 +4,12 @@
             <a href="/index.html" target="_self">R.Z's Blog</a>
         </h1>
         <ul class="nav">
-            <li>搜索</li>
-            <li>首页</li>
-            <li>博文</li>
-            <li>社区</li>
-            <li>用户</li>
+            <router-view></router-view>
+            <li><router-link to="/search">搜索</router-link></li>
+            <li><a href="javascript:">首页</a></li>
+            <li><a href="javascript:">博文</a></li>
+            <li><a href="javascript:">社区</a></li>
+            <li><router-link to="/login">用户</router-link></li>
         </ul>
     </div>
 </template>
@@ -27,6 +28,7 @@ div.box{
     height: 50px;
     box-shadow: 0 0 1px 3px #aaa;
     background-color: white;
+    z-index: 10;
 }
 
 h1{
@@ -67,6 +69,16 @@ ul.nav li{
     letter-spacing: 5px; 
     color: #666;
     /* background-color: red; */
+}
+
+ul.nav li a{
+    text-decoration: none;
+    transition: color 0.3s ease;
+    color: #666;
+}
+
+ul.nav li a:hover{
+    color: burlywood;
 }
 
 
