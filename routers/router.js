@@ -7,6 +7,7 @@ var router = express.Router();
 
 //指定暴露给客户端的资源目录
 router.use('/dist', express.static(path.join(__dirname, '../dist')));
+router.use('/public', express.static(path.join(__dirname, '../public')));
 router.use('/node_modules', express.static(path.join(__dirname, '../node_modules')));
 
 

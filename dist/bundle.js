@@ -832,6 +832,36 @@ if(false) {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     
@@ -13808,9 +13838,71 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "box" }, [_vm._v("网页主体")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "box" }, [
+      _c("div", { staticClass: "poster" }, [
+        _c("img", {
+          attrs: {
+            src: "/public/images/uestc_slogan.jpg",
+            alt: "The Image Of the Pinxue Buildings"
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "articles" }, [
+        _c("div", { staticClass: "art1" }, [
+          _c("div", { staticClass: "swipe" }, [
+            _c("h2", [_vm._v("windwos装机教程")]),
+            _vm._v(" "),
+            _c("span", [
+              _vm._v(
+                "windows 8/8.1/10 操作系统通用安装教程，通俗地讲解windows安装步骤及配置原理。"
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "art2" }, [
+          _c("div", { staticClass: "swipe" }, [
+            _c("h2", [_vm._v("miui个人优化方案")]),
+            _vm._v(" "),
+            _c("span", [
+              _vm._v(
+                "个人日用miui相关优化设置，无需root，用以保证miui更佳的流畅和续航。"
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "art3" }, [
+          _c("div", { staticClass: "swipe" }, [
+            _c("h2", [_vm._v("大话miui与ios")]),
+            _vm._v(" "),
+            _c("span", [
+              _vm._v(
+                "对比基于android的miui系统和ios的功能设置、应用质量等指标。"
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "art4" }, [
+          _c("div", { staticClass: "swipe" }, [
+            _c("h2", [_vm._v("畅聊QQ与微信")]),
+            _vm._v(" "),
+            _c("span", [_vm._v("对于微信和QQ的个人简介。")])
+          ])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -13831,7 +13923,7 @@ render._withStripped = true
 
 exports = module.exports = __webpack_require__(0)(false);
 // Module
-exports.push([module.i, "\ndiv.box[data-v-43bb6f0a]{\r\n    height: 2200px;\r\n    margin-top: 50px;\r\n    /* background-color: white; */\n}\r\n", ""]);
+exports.push([module.i, "\ndiv.box[data-v-43bb6f0a]{\r\n    margin-top: 50px;\r\n    overflow: hidden;\n}\ndiv.box div.poster[data-v-43bb6f0a]{\r\n    height: 700px;\r\n    width: 100%;\r\n    overflow: hidden;\r\n    background-color: #222;\n}\ndiv.box div.poster img[data-v-43bb6f0a]{\r\n    margin-top: -200px;\r\n    width: 100%;\n}\ndiv.articles[data-v-43bb6f0a]{\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    justify-content: flex-start;\r\n    margin: 0 auto;\r\n    padding-top: 60px;\r\n    width: 80%;\r\n    background-color: #666;\n}\ndiv.box div.articles div[data-v-43bb6f0a]{\r\n    position: relative;\r\n    display: inline-block;\r\n    width: 350px;\r\n    height: 400px;\r\n    margin: 0 25px 50px 25px;\r\n    overflow: hidden;\r\n    background-color: yellow;\n}\r\n\r\n", ""]);
 
 
 
