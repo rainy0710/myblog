@@ -3,8 +3,8 @@
         <h1>
             <a href="/index.html" target="_self">R.Z's Blog</a>
         </h1>
+        <router-view></router-view>
         <ul class="nav">
-            <router-view></router-view>
             <li><router-link to="/search">搜索</router-link></li>
             <li><a href="javascript:">首页</a></li>
             <li><a href="javascript:">博文</a></li>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import search from 
+
 export default {
     
 }
