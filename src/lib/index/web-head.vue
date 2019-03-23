@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import search from 
+import search from './search.vue'
 
 export default {
     
