@@ -1,12 +1,8 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import web from './web.vue'
-import router from './lib/routers/web-index-router.js'
+// import Vue from './vue.runtime.common.js'
 
-Vue.use(VueRouter);
-
-var vm = new Vue({
+let app = new Vue({
     el: '#app',
-    render: c => c(web),
-    router
+    data: {
+        msg: '这是Vue中的数据'
+    }
 })
