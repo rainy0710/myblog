@@ -14,7 +14,7 @@ server.on('request', (request, response) => {
     let urlName = path.join(__dirname, '/src/index.html');
 
     // 如果请求其他资源
-    if(pathName !== '/'){
+    if(pathName !== '/' && pathName !== '/index'){
         urlName = path.join(__dirname, pathName);
     }
 
@@ -32,30 +32,3 @@ server.on('request', (request, response) => {
 server.listen(80, () => {
     console.log('The HTTP server is running......');
 });
-
-
-
-
-// 原生Apache模式
-// var server = http.createServer();
-
-// server.on('request', function (request, response) {
-//     var urlName = './src/index.html';
-
-//     pathName = url.parse(request.url, true).pathname;
-//     if (pathName !== '/') {
-//         urlName = pathName;
-//     }
-
-//     fs.readFile(path.join(__dirname, urlName), function (err, data) {
-//         if (err) {
-//             return response.end('404 Resource Not Found!');
-//         }
-
-//         response.end(data);
-//     })
-// });
-
-// server.listen(80, function () {
-//     console.log('The http server is running ......');
-// })

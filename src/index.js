@@ -1,9 +1,16 @@
-import Vue from 'vue'
+// 切勿使用vue.runtime.common.js
+import Vue from "vue"
+import maincom from "./components/maincom.vue"
 
-let app = new Vue({
+var app =new Vue({
     el: '#app',
     data: {
-        indexTitle: '房屋 婚介 租车 公证',
-        msg: '这是Vue中的数据'
+        
+    },
+    methods: {
+
+    },
+    components: {
+        'main-com': maincom
     }
 })
