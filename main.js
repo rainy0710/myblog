@@ -16,6 +16,19 @@ server.on('request', (request, response) => {
     // 如果请求其他资源
     if(pathName !== '/' && pathName !== '/index'){
         urlName = path.join(__dirname, pathName);
+    }else{
+        // 记录访问日志
+        let pingAct = `
+        ${new Date()} IP--${request.socket.remoteAddress}:${request.socket.remotePort}
+        `;
+    
+        fs.writeFile('./pinglog.txt', pingAct, {
+            flag: 'a'
+        }, (err) => {
+            if(err){
+                console.log('One request hasn\'t been recorded!');
+            }
+        })
     }
 
     fs.readFile(urlName, (err, data) => {
@@ -26,7 +39,6 @@ server.on('request', (request, response) => {
 
         response.end(data);
     })
-
 });
 
 server.listen(80, () => {
