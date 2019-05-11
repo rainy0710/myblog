@@ -1,35 +1,54 @@
 <template>
     <div id="my-album">
-        <div v-for="(item,index) in pics" v-bind:key="item" v-bind:class="'scroll pos' + item">
-            <div class="pic" v-bind:style="'background-image: ' + backgroundImg[index]"></div>
+        <div class="scroll" v-for="(item,index) in pics" v-bind:key="index" v-bind:class="item">
+            <div class="pic" v-bind:style="{backgroundImage: backgroundImg[index]}"></div>
         </div>
     </div>
 </template>
 <script>
-
-
 export default {
     data: () => {
         return {
-            pics: [
-                1,2,3,4,5,6
-            ],
-            backgroundImg: [
-                'url("/public/images/001.jpg")',
-                'url("/public/images/002.jpg")',
-                'url("/public/images/003.jpg")',
-                'url("/public/images/004.jpg")',
-                'url("/public/images/005.jpg")',
-                'url("/public/images/006.jpg")'
-            ]
+            shiftPic: 0,
+            showPic: 6,
+            // 记录相册中可展示的照片总数
+            picCount: 22,
+            pics: [],
+            backgroundImg: []
         }
     },
     methods: {
-
-
+    },
+    created: function(){
+        for(let i = 0; i < 6; i ++){
+            this.backgroundImg[this.backgroundImg.length] = "url('/public/images/" + i + ".jpg')";
+            let tempItem = {
+                pos0: false,
+                pos1: false,
+                pos2: false,
+                pos3: false,
+                pos4: false,
+                pos5: false,
+                pos6: false
+            }
+            this.pics[i] = tempItem;
+            this.pics[i]['pos' + (i + 1)] = true;
+        }
+        console.log(this.pics);
     },
     mounted: function(){
-        
+        let that = this;
+        let scrollTimer = setInterval(() => {
+            // 迭代修改各个容器的class属性值以修改他们CSS特性
+            for(let i = 0; i < 6; i ++){
+                that.pics[(that.shiftPic + i) % 6]['pos' + (i + 1)] = false;
+                that.pics[(that.shiftPic + i) % 6]['pos' + i] = true;
+            }
+
+            that.backgroundImg[that.shiftPic] = "url('/public/images/" + that.showPic +".jpg')";
+            that.shiftPic = (that.shiftPic + 1) % 6;
+            that.showPic = (that.showPic + 1) % that.picCount;
+        }, 2000);
     }
 }
 </script>
