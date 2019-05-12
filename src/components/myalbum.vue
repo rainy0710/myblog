@@ -22,32 +22,21 @@ export default {
     created: function(){
         for(let i = 0; i < 6; i ++){
             this.backgroundImg[this.backgroundImg.length] = "url('/public/images/" + i + ".jpg')";
-            let tempItem = {
-                pos0: false,
-                pos1: false,
-                pos2: false,
-                pos3: false,
-                pos4: false,
-                pos5: false,
-                pos6: false
-            }
-            this.pics[i] = tempItem;
-            this.pics[i]['pos' + (i + 1)] = true;
+            this.pics.push('pos' + (i + 1));
         }
-        console.log(this.pics);
     },
     mounted: function(){
-        let that = this;
         let scrollTimer = setInterval(() => {
+            console.log(this.pics);
             // 迭代修改各个容器的class属性值以修改他们CSS特性
-            for(let i = 0; i < 6; i ++){
-                that.pics[(that.shiftPic + i) % 6]['pos' + (i + 1)] = false;
-                that.pics[(that.shiftPic + i) % 6]['pos' + i] = true;
-            }
+            this.pics.forEach((item, index, arr) => {
+                let num = parseInt(item.substring(3));
+                arr[index] = 'pos' + (num - 1);
+            });
 
-            that.backgroundImg[that.shiftPic] = "url('/public/images/" + that.showPic +".jpg')";
-            that.shiftPic = (that.shiftPic + 1) % 6;
-            that.showPic = (that.showPic + 1) % that.picCount;
+            this.pics[this.shiftPic] = 'pos6'
+            this.showPic = (this.showPic + 1) % this.picCount;
+            this.shiftPic = (this.shiftPic + 1) % 6;
         }, 2000);
     }
 }
