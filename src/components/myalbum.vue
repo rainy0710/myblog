@@ -1,10 +1,11 @@
 <template>
     <div id="my-album">
-        <div class="scroll" v-for="(item,index) in pics" v-bind:key="index" v-bind:class="item">
+        <div class="scroll" v-for="(item,index) in pics" v-bind:key="index" v-bind:class="pics[index]">
             <div class="pic" v-bind:style="{backgroundImage: backgroundImg[index]}"></div>
         </div>
     </div>
 </template>
+
 <script>
 export default {
     data: () => {
@@ -27,20 +28,34 @@ export default {
     },
     mounted: function(){
         let scrollTimer = setInterval(() => {
-            console.log(this.pics);
+            // 创建一个临时数组对象以为data中的数组更新做准备
+            let arrTemp = [];
             // 迭代修改各个容器的class属性值以修改他们CSS特性
             this.pics.forEach((item, index, arr) => {
                 let num = parseInt(item.substring(3));
-                arr[index] = 'pos' + (num - 1);
+                arrTemp.push('pos' + (num - 1));
             });
-
+            // 只有model数据的实际值发生变化才会出发view-model层的值更新
+            this.pics = arrTemp;
             this.pics[this.shiftPic] = 'pos6'
+            
+            arrTemp = [];
+            this.backgroundImg.forEach((item, index, arr) => {
+                if(index === this.shiftPic){
+                    arrTemp.push("url('/public/images/" + this.showPic + ".jpg')");
+                }else{
+                    arrTemp.push(item);
+                }
+            })
+            this.backgroundImg = arrTemp;
+
             this.showPic = (this.showPic + 1) % this.picCount;
             this.shiftPic = (this.shiftPic + 1) % 6;
-        }, 2000);
+        }, 3000);
     }
 }
 </script>
+
 <style scoped>
 div#my-album{
     position: relative;
@@ -53,6 +68,7 @@ div#my-album{
 
 div.scroll{
     position: absolute;
+    transition: all 0.5s ease;
     background-color: #fff;
 }
 
@@ -128,5 +144,6 @@ div.pos6{
     left: 105%;
     top: 25%;
 }
+
 </style>
 

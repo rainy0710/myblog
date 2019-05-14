@@ -10,6 +10,8 @@ module.exports = {
         filename: 'bundle.js'
     },
 
+    mode: 'development',
+
     module: {
         rules: [
             // 安装单文件组件的loader
