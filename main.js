@@ -6,6 +6,14 @@ const fs = require('fs');
 const server = http.createServer();
 
 server.on('request', (request, response) => {
+    // 设置允许跨域
+    response.setHeader('Access-Control-Allow-Origin', '*');    // 访问控制允许来源：所有
+    response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');    // 访问控制允许报头 X-Requested-With: xhr请求
+    response.setHeader('Access-Control-Allow-Metheds', 'PUT, POST, GET, DELETE, OPTIONS');    // 访问控制允许方法
+    response.setHeader('X-Powered-By', 'nodejs');    // 自定义头信息，表示服务端用nodejs
+
+
+
     // 获取请求的URL信息
     let filePath = url.parse(request.url, true);
     let pathName = filePath.pathname;

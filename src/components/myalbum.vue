@@ -1,7 +1,12 @@
 <template>
     <div id="my-album">
-        <div class="scroll" v-for="(item,index) in pics" v-bind:key="index" v-bind:class="pics[index]">
-            <div class="pic" v-bind:style="{backgroundImage: backgroundImg[index]}"></div>
+        <p class="title">房屋  婚介  租车  公正</p>
+        <div class="slogan">
+            <p>或许,你和爱情之间，只有一个网站的距离。</p>
+            <p>————某位智者</p>
+        </div>
+        <div class="poster">
+            <img v-bind:src="imgSrc" v-bind:title="imgTitle" />
         </div>
     </div>
 </template>
@@ -10,48 +15,41 @@
 export default {
     data: () => {
         return {
-            shiftPic: 0,
-            showPic: 6,
-            // 记录相册中可展示的照片总数
-            picCount: 22,
-            pics: [],
-            backgroundImg: []
+            imgSrc: '/public/images/0.jpg',
+            imgTitle: 'turtles',
+            images: [],
+            imgNum: 0
         }
     },
-    methods: {
-    },
-    created: function(){
-        for(let i = 0; i < 6; i ++){
-            this.backgroundImg[this.backgroundImg.length] = "url('/public/images/" + i + ".jpg')";
-            this.pics.push('pos' + (i + 1));
-        }
-    },
+    methods: {},
     mounted: function(){
-        let scrollTimer = setInterval(() => {
-            // 创建一个临时数组对象以为data中的数组更新做准备
-            let arrTemp = [];
-            // 迭代修改各个容器的class属性值以修改他们CSS特性
-            this.pics.forEach((item, index, arr) => {
-                let num = parseInt(item.substring(3));
-                arrTemp.push('pos' + (num - 1));
-            });
-            // 只有model数据的实际值发生变化才会出发view-model层的值更新
-            this.pics = arrTemp;
-            this.pics[this.shiftPic] = 'pos6'
-            
-            arrTemp = [];
-            this.backgroundImg.forEach((item, index, arr) => {
-                if(index === this.shiftPic){
-                    arrTemp.push("url('/public/images/" + this.showPic + ".jpg')");
-                }else{
-                    arrTemp.push(item);
-                }
-            })
-            this.backgroundImg = arrTemp;
+        let that = this;
+        let xmlhttp;
+        if (window.XMLHttpRequest){
+            // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+            xmlhttp = new XMLHttpRequest();
+        }else{
+            // IE6, IE5 浏览器执行代码
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
 
-            this.showPic = (this.showPic + 1) % this.picCount;
-            this.shiftPic = (this.shiftPic + 1) % 6;
-        }, 3000);
+        xmlhttp.onreadystatechange = function(){
+            if(xmlhttp.readyState === 4){
+                if((xmlhttp.status >= 200 && xmlhttp.status < 300) || xmlhttp == 304){
+                    let json = xmlhttp.responseText;
+                    
+                    that.images = JSON.parse(json);
+                    let imgTimer = setInterval(() => {
+                        that.imgSrc = that.images[that.imgNum].imgSrc;
+                        that.imgTitle = that.images[that.imgNum].imgTitle;
+                        that.imgNum = (that.imgNum + 1) % that.images.length;
+                    }, 8000);
+                }      
+            }
+        }
+
+        xmlhttp.open('GET', '/public/images.json', true);
+        xmlhttp.send();
     }
 }
 </script>
@@ -59,90 +57,76 @@ export default {
 <style scoped>
 div#my-album{
     position: relative;
-    height: 420px;
-    background-size: cover;
-    background-position: center center;
-    background-image: url('/public/images/albumImage.jpg');
+    height: 800px;
     overflow: hidden;
 }
 
-div.scroll{
+div#my-album>p.title{
     position: absolute;
-    transition: all 0.5s ease;
-    background-color: #fff;
+    left: 50%;
+    top: 200px;
+    width: 600px;
+    height: 250px;
+    line-height: 250px;
+    text-align: center;
+    margin-left: -300px;
+    font-weight: 750;
+    font-size: 50px;
+    color: #333;
+    font-family: "Arial", "Microsoft YaHei";
+    background-color: rgba(230, 230, 230, 0.7);
 }
 
-div.pic{
+div#my-album>div.slogan{
     position: absolute;
-    background-color: #000;
-    background-size: cover;
-    background-position: center center;
-    width: 94%;
-    height: 94%;
+    right: 3%;
+    top: 650px;
+    width: 220px;
+    height: 80px;
+    color: #eee;
+    padding: 20px 40px;
+    overflow: hidden;
+    background-color: rgba(60, 60, 60, 0.6);
+}
+
+div#my-album>div.slogan p:nth-child(2){
+    margin-left: 90px;
+}
+
+div.poster{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     left: 0;
     top: 0;
-    margin: 3% 3%;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    background-color: #000;
 }
 
-div.pos1,div.pos5{
-    width: 180px;
-    height: 240px;
-    opacity: 0.6;
-    filter: alpha(opacity:60);
+div.poster img{
+    width: 100%;
+    height: auto;
+    animation: scroll 8s linear infinite;
 }
 
-div.pos2,div.pos4{
-    width: 240px;
-    height: 320px;
-    opacity: 0.85;
-    filter: alpha(opacity:85);
-}
-
-div.pos0,div.pos6{
-    width: 150px;
-    height: 200px;
-    opacity: 0.3;
-    filter: alpha(opacity:30);
-}
-
-div.scroll.pos3{
-    width: 270px;
-    height: 360px;
-}
-
-div.pos0{
-    left: -25%;
-    top: 25%;
-}
-
-div.pos1{
-    left: 4%;
-    top: 20%;
-}
-
-div.pos2{
-    left: 20%;
-    top: 10%;
-}
-
-div.pos3{
-    left: 41%;
-    top: 5%;
-}
-
-div.pos4{
-    left: 64%;
-    top: 10%
-}
-
-div.pos5{
-    left: 85%;
-    top: 20%;
-}
-
-div.pos6{
-    left: 105%;
-    top: 25%;
+@keyframes scroll{
+    0%{
+        transform: scale(1, 1);
+        opacity: 0;
+    }
+    3%{
+        opacity: 1;
+    }
+    97%{
+        opacity: 1;
+    }
+    100%{
+        transform: scale(1.2, 1.2);
+        opacity: 0;
+    }
 }
 
 </style>
