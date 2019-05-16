@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/rainy0710/myblog#readme",
   "dependencies": {
+    "jsmediatags": "^3.8.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {

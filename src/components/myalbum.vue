@@ -12,11 +12,13 @@
 </template>
 
 <script>
+const rAjax = require('../lib/rAjax');
+
 export default {
     data: () => {
         return {
             imgSrc: '/public/images/0.jpg',
-            imgTitle: 'turtles',
+            imgTitle: 'Wen Shu Yuan',
             images: [],
             imgNum: 0
         }
@@ -24,32 +26,19 @@ export default {
     methods: {},
     mounted: function(){
         let that = this;
-        let xmlhttp;
-        if (window.XMLHttpRequest){
-            // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
-            xmlhttp = new XMLHttpRequest();
-        }else{
-            // IE6, IE5 浏览器执行代码
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function(){
-            if(xmlhttp.readyState === 4){
-                if((xmlhttp.status >= 200 && xmlhttp.status < 300) || xmlhttp == 304){
-                    let json = xmlhttp.responseText;
+        
+        rAjax('POST', '/public/images.json', (xmlhttp) => {
+            let json = xmlhttp.responseText;
                     
-                    that.images = JSON.parse(json);
-                    let imgTimer = setInterval(() => {
-                        that.imgSrc = that.images[that.imgNum].imgSrc;
-                        that.imgTitle = that.images[that.imgNum].imgTitle;
-                        that.imgNum = (that.imgNum + 1) % that.images.length;
-                    }, 8000);
-                }      
-            }
-        }
-
-        xmlhttp.open('GET', '/public/images.json', true);
-        xmlhttp.send();
+            that.images = JSON.parse(json);
+            let imgTimer = setInterval(() => {
+                that.imgSrc = that.images[that.imgNum].imgSrc;
+                that.imgTitle = that.images[that.imgNum].imgTitle;
+                that.imgNum = (that.imgNum + 1) % that.images.length;
+            }, 8000);
+        }, (xmlhttp) => {
+            console.log('404 Resource Not Found!');
+        });
     }
 }
 </script>
