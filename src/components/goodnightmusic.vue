@@ -9,12 +9,10 @@
             <div class="words" v-text="words"></div>
             <div class="player">
                 <audio preload loop>
-                    <source v-bind:src="mp3Src" type="audio/mp3">
-                    <source v-bind:src="wavSrc" type="audio/wav">
+                    <source v-bind:src="musicSrc" type="audio/mp3">
                 </audio>
-            </div>
-            
 
+            </div>
         </div>
     </diV>
 </template>
@@ -22,19 +20,21 @@
 export default {
     data: function(){
         return {
-            mp3Src: '/public/music/当你走了 - 吾尊.mp3',
-            wavSrc: '/public/music/当你走了 - 吾尊 (mp3cut.net).wav',
-            words: '当你走了，我也哭了',
+            musicSrc: '',
+            words: '',
             musicList: []
         }
     },
     methods: {
-        musicPlay: function(url){
+        selectMusic: function (url){
 
         }
     },
     created: function(){
-
+        ajax('GET', '/public/music.json', (xmlhttp) => {
+            let json = xmlhttp.responseText;
+            this.musicList = JSON.parse(json);
+        })
     }
 }
 </script>

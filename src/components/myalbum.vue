@@ -12,8 +12,6 @@
 </template>
 
 <script>
-const rAjax = require('../lib/rAjax');
-
 export default {
     data: () => {
         return {
@@ -27,7 +25,7 @@ export default {
     mounted: function(){
         let that = this;
         
-        rAjax('POST', '/public/images.json', (xmlhttp) => {
+        ajax('GET', '/public/images.json', (xmlhttp) => {
             let json = xmlhttp.responseText;
                     
             that.images = JSON.parse(json);
