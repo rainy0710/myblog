@@ -44,7 +44,7 @@ export default {
 <style scoped>
 div#my-album{
     position: relative;
-    height: 800px;
+    height: 750px;
     overflow: hidden;
 }
 
@@ -67,10 +67,12 @@ div#my-album>p.title{
 div#my-album>div.slogan{
     position: absolute;
     right: 3%;
-    top: 650px;
+    top: 600px;
     width: 220px;
-    height: 80px;
+    height: 70px;
     color: #eee;
+    font-size: 16px;
+    font-family: "Arial Black", "楷体", "Microsoft YaHei";
     padding: 20px 40px;
     overflow: hidden;
     background-color: rgba(60, 60, 60, 0.6);
