@@ -6,7 +6,10 @@
             <p>————某位智者</p>
         </div>
         <div class="poster">
-            <img v-bind:src="imgSrc" v-bind:title="imgTitle" />
+            <transition>
+                <img :src="imgSrc" v-bind:title="imgTitle" :class="aniControl" />
+            </transition>
+            
         </div>
     </div>
 </template>
@@ -18,7 +21,8 @@ export default {
             imgSrc: '/public/images/0.jpg',
             imgTitle: 'Wen Shu Yuan',
             images: [],
-            imgNum: 0
+            imgNum: 0,
+            aniControl: ''
         }
     },
     methods: {},
@@ -27,12 +31,15 @@ export default {
         
         ajax('GET', '/public/images.json', (xmlhttp) => {
             let json = xmlhttp.responseText;
-                    
+
+            this.aniControl = 'animating';
             that.images = JSON.parse(json);
             let imgTimer = setInterval(() => {
+                this.aniControl = '';
                 that.imgSrc = that.images[that.imgNum].imgSrc;
                 that.imgTitle = that.images[that.imgNum].imgTitle;
                 that.imgNum = (that.imgNum + 1) % that.images.length;
+                this.aniControl = 'animating';
             }, 8000);
         }, (xmlhttp) => {
             console.log('404 Resource Not Found!');
@@ -98,18 +105,22 @@ div.poster{
 div.poster img{
     width: 100%;
     height: auto;
+}
+
+div.poster img.animating{
     animation: scroll 8s linear infinite;
 }
+
 
 @keyframes scroll{
     0%{
         transform: scale(1, 1);
         opacity: 0;
     }
-    3%{
+    10%{
         opacity: 1;
     }
-    97%{
+    90%{
         opacity: 1;
     }
     100%{
