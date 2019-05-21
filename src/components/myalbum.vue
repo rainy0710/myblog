@@ -35,7 +35,6 @@ export default {
             this.aniControl = 'animating';
             that.images = JSON.parse(json);
             let imgTimer = setInterval(() => {
-                this.aniControl = '';
                 that.imgSrc = that.images[that.imgNum].imgSrc;
                 that.imgTitle = that.images[that.imgNum].imgTitle;
                 that.imgNum = (that.imgNum + 1) % that.images.length;
