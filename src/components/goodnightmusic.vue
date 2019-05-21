@@ -27,8 +27,8 @@
                         </div>
                     </div>
                 </div>
-                <audio preload loop ref="player">
-                    <source :src="musicSrc" type="audio/mp3">
+                <audio :src="musicSrc" preload loop ref="player">
+                    <source type="audio/mp3">
                 </audio>
             </div>
         </div>
@@ -71,12 +71,12 @@ export default {
             this.musicArtist = musicInfo[2];
             this.musicDate = selected.date;
             this.musicSrc = selected.url;
-            this.musicDescription = selected.description;
+            this.musicDescription = selected.description || "音乐伴孤独，一曲解忧愁。";
         },
         switchPrev: function(){
             this.nextInfo = '';
             if(this.selectedNum === 0){
-                this.prevInfo = '已切换至第一首';
+                alert("已切换至第一首！");
                 return;
             }
 
@@ -89,12 +89,15 @@ export default {
             this.selectedNum --;
             this.selectMusic();
             
-            this.$refs.player.play();
+            this.$refs.player.load();
+            setTimeout(() => {
+                this.$refs.player.play();
+            }, 500);
         },
         switchNext: function(){
             this.prevInfo = '';
             if(this.selectedNum === (this.musicList.length - 1)){
-                this.nextInfo = '已切换至最后一首';
+                alert("已切换至最后一首！");
                 return;
             }
 
@@ -107,17 +110,18 @@ export default {
             this.selectedNum ++;
             this.selectMusic();
             
-            this.$refs.player.play();
+            this.$refs.player.load();
+            setTimeout(() => {
+                this.$refs.player.play();
+            }, 500);
         },
         playPause: function(){
             if(this.$refs.player.paused){
                 this.state = 'pause';
                 this.$refs.player.play();
-                console.log('start playing!');
             }else{
                 this.state = 'play';
                 this.$refs.player.pause();
-                console.log('stop playing!');
             }
         }
 
