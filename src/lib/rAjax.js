@@ -9,7 +9,7 @@
 function robj2str(obj){
     let result = [];
     Object.keys(obj).forEach(item => {
-        result.push(encodeURIComponent(item) + '=' + encodeURIComponent(obj[item]));
+        result.push(escape(item) + '=' + escape(obj[item]));
     });
     result.push('time=' + new Date().getTime());
     let ret = result.join('&');

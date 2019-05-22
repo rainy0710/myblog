@@ -21,59 +21,12 @@ server.on('request', (request, response) => {
     let pathName = decodeURIComponent(filePath.pathname);
     let paras = {};
     Object.keys(filePath.query).forEach((item, index, arr) => {
-        paras[decodeURIComponent(item)] = decodeURIComponent(filePath.query[item]);
+        // 使用encodeURIComponent方式加密遇到'%'解密时会报错
+        paras[unescape(item)] = unescape(filePath.query[item]);
     })
 
     // 拿到该请求资源的绝对路径
     let urlName = path.join(__dirname, pathName);
-    
-    
-    // // 使用正则来对URL进行识别并做相应的处理
-    // switch(true){
-    //     case /^\/$/.test(pathName):
-    //     case /^\/index$/.test(pathName):
-    //     case /^\/index\.html$/.test(pathName):
-    //         // 设置主页地址
-    //         urlName = path.join(__dirname, '/src/index.html');
-
-    //         // 记录访问日志
-    //         let pingAct = `
-    //         ${new Date()} IP--${request.socket.remoteAddress}:${request.socket.remotePort}
-    //         `;
-            
-    //         fs.writeFile('./pinglog.txt', pingAct, {
-    //             flag: 'a'
-    //         }, (err) => {
-    //             if(err){
-    //                 console.log('One request hasn\'t been recorded!');
-    //             }
-    //         })
-
-    //         break;
-    //     case /.*\.mp3$/.test(pathName):
-    //         // 读取请求的mp3文件
-    //         fs.readFile(urlName, (err, data) => {
-    //             if(err){
-    //                 response.end('Music file Not Found!');
-    //                 return;
-    //             }
-        
-    //             new jsmediatags.Reader(urlName)
-    //             .setTagsToRead(["title", "artist"])
-    //             .read({
-    //                 onSuccess: function(tag) {
-                        
-    //                     response.end(JSON.stringify(tag));
-    //                     console.log('Something has been sent back.');
-    //                 },
-    //                 onError: function(error) {
-    //                     response.end(':(' + error.type + error.info);
-    //                 }
-    //             });
-    //         });
-    //         break;
-            
-    // }
 
 
     if(pathName === '/' || pathName === '/index' || pathName === '/index.html'){
