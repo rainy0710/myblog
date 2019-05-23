@@ -7,7 +7,7 @@
         </div>
         <div class="poster">
             <transition>
-                <img :src="imgSrc" v-bind:title="imgTitle" :class="aniControl" />
+                <img :src="imgSrc" v-bind:title="imgTitle" v-show="aniControl" />
             </transition>
             
         </div>
@@ -22,7 +22,7 @@ export default {
             imgTitle: 'Wen Shu Yuan',
             images: [],
             imgNum: 0,
-            aniControl: ''
+            aniControl: false
         }
     },
     methods: {},
@@ -32,13 +32,16 @@ export default {
         ajax('GET', '/public/images.json', (xmlhttp) => {
             let json = xmlhttp.responseText;
 
-            this.aniControl = 'animating';
+            this.aniControl = true;
             that.images = JSON.parse(json);
             let imgTimer = setInterval(() => {
+                this.aniControl = false;
                 that.imgSrc = that.images[that.imgNum].imgSrc;
                 that.imgTitle = that.images[that.imgNum].imgTitle;
                 that.imgNum = (that.imgNum + 1) % that.images.length;
-                this.aniControl = 'animating';
+                setTimeout(() => {
+                    this.aniControl = true;
+                }, 500);
             }, 8000);
         }, (xmlhttp) => {
             console.log('404 Resource Not Found!');
@@ -106,8 +109,29 @@ div.poster img{
     height: auto;
 }
 
-div.poster img.animating{
-    animation: scroll 8s linear infinite;
+.v-enter{
+    opacity: 0;
+    transform: scale(1, 1);
+}
+
+.v-enter-active{
+    animation: scroll 8s linear;
+}
+
+.v-enter-to,
+.v-leave{
+    opacity: 1;
+    transform: scale(1.2, 1.2);
+}
+
+.v-leave-active{
+    transform: opacity 0.5s ease;
+}
+
+
+.v-leave-to{
+    opacity: 0;
+    transform: scale(1.2, 1.2);
 }
 
 
@@ -119,12 +143,8 @@ div.poster img.animating{
     10%{
         opacity: 1;
     }
-    90%{
-        opacity: 1;
-    }
     100%{
         transform: scale(1.2, 1.2);
-        opacity: 0;
     }
 }
 
