@@ -7,7 +7,7 @@
         </div>
         <div class="poster">
             <transition>
-                <img :src="imgSrc" v-bind:title="imgTitle" v-show="aniControl" />
+                <img :src="imgSrc" v-bind:title="imgTitle" v-show="aniControl" ref="img"/>
             </transition>
             
         </div>
@@ -18,29 +18,38 @@
 export default {
     data: () => {
         return {
-            imgSrc: '/public/images/0.jpg',
-            imgTitle: 'Wen Shu Yuan',
+            imgSrc: '',
+            imgTitle: '',
             images: [],
-            imgNum: 0,
-            aniControl: false
+            aniControl: false,
+            imgNum: 0
         }
     },
     methods: {},
-    mounted: function(){
-        let that = this;
-        
+    mounted: function(){    
         ajax('GET', '/public/images.json', (xmlhttp) => {
             let json = xmlhttp.responseText;
 
             this.aniControl = true;
-            that.images = JSON.parse(json);
+            this.images = JSON.parse(json);
+            if(this.images.length <= 0){
+                console.log('Can\'t get the images.json data.');
+                return;
+            }
+
+            this.imgNum = Math.floor(Math.random() * this.images.length);
+            this.imgSrc = '/public/images/' + this.imgNum + '.jpg';
+            this.imgTitle = this.images[this.imgNum].imgTitle;
             let imgTimer = setInterval(() => {
                 this.aniControl = false;
-                that.imgSrc = that.images[that.imgNum].imgSrc;
-                that.imgTitle = that.images[that.imgNum].imgTitle;
-                that.imgNum = (that.imgNum + 1) % that.images.length;
+                this.imgNum = Math.floor(Math.random() * this.images.length)
+
                 setTimeout(() => {
-                    this.aniControl = true;
+                    this.imgTitle = this.images[this.imgNum].imgTitle;
+                    this.imgSrc = '/public/images/' + this.imgNum + '.jpg';
+                    this.$refs.img.onload = () => {
+                        this.aniControl = true;
+                    }
                 }, 500);
             }, 8000);
         }, (xmlhttp) => {
@@ -107,6 +116,7 @@ div.poster{
 div.poster img{
     width: 100%;
     height: auto;
+    transform: scale(1.2, 1.2);
 }
 
 .v-enter{
@@ -115,7 +125,7 @@ div.poster img{
 }
 
 .v-enter-active{
-    animation: scroll 8s linear;
+    animation: fadein 7.5s linear;
 }
 
 .v-enter-to,
@@ -125,7 +135,7 @@ div.poster img{
 }
 
 .v-leave-active{
-    transform: opacity 0.5s ease;
+    animation: fadeout 0.5s linear;
 }
 
 
@@ -135,7 +145,7 @@ div.poster img{
 }
 
 
-@keyframes scroll{
+@keyframes fadein{
     0%{
         transform: scale(1, 1);
         opacity: 0;
@@ -144,6 +154,18 @@ div.poster img{
         opacity: 1;
     }
     100%{
+        opacity: 1;
+        transform: scale(1.2, 1.2);
+    }
+}
+
+@keyframes fadeout{
+    from{
+        opacity: 1;
+        transform: scale(1.2, 1.2);
+    }
+    to{
+        opacity: 0;
         transform: scale(1.2, 1.2);
     }
 }

@@ -57,7 +57,6 @@ server.on('request', (request, response) => {
             if('query' in paras && 'callback' in paras){
                 urlName = path.join(__dirname, unescape(paras['query']));
             }
-            console.log(urlName);
             fs.readFile(urlName, (err, data) => {
                 if(err){
                     response.end('404 Not Found!');
