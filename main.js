@@ -3,7 +3,7 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const jsmediatags = require("jsmediatags");
-const ID3 = require('ID3');
+const NodeID3 = require('node-id3')
 
 const server = http.createServer();
 
@@ -29,16 +29,9 @@ server.on('request', (request, response) => {
         case /^\/album\/.*\.mp3/.test(pathName):
             let reg = /.*\/([^\/\.]*\.mp3)$/;
             let musicTitle = reg.exec(pathName)[1];
-            urlName = 'http://127.0.0.1/public/music/' + encodeURIComponent(musicTitle);
-            ID3.loadTags(urlName, () => {
-                let tags = ID3.getAllTags(urlName);
-
-                let image = tags.album;
-                if (!image) {
-                    let base64String = String.fromCharCode(image);
-                    let base64 = "data:" + image.format + ";base64," + window.btoa(base64String);
-                    response.end(base64);
-                } else {
+            urlName = path.join(__dirname, '/public/music/' + musicTitle);
+            NodeID3.read(urlName, function(err, tags) {
+                if(err){
                     fs.readFile(path.join(__dirname, '/public/images/defaultCover.jpg'), (err, data) => {
                         if(err){
                             response.end('404 Not Found!');
@@ -47,8 +40,32 @@ server.on('request', (request, response) => {
                 
                         response.end(data);
                     })
+                }else{
+                    response.end(tags.image.imageBuffer);
                 }
+
+                /*
+                tags: {
+                  title: "Tomorrow",
+                  artist: "Kevin Penkin",
+                  image: {
+                    mime: "jpeg",
+                    type: {
+                      id: 3,
+                      name: "front cover"
+                    },
+                    description: String,
+                    imageBuffer: Buffer
+                  },
+                  raw: {
+                    TIT2: "Tomorrow",
+                    TPE1: "Kevin Penkin",
+                    APIC: Object (See above)
+                  }
+                }
+                */
             })
+
             break;
 
         // 请求主页
