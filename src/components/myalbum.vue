@@ -2,7 +2,7 @@
     <div id="my-album">
         <p class="title">房屋  婚介  租车  公正</p>
         <div class="slogan">
-            <p>或许,你和爱情之间，只有一个网站的距离。</p>
+            <p>或许，你和爱情之间，只有一个网站的距离。</p>
             <p>————某位智者</p>
         </div>
         <div class="poster">
