@@ -3,15 +3,11 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const jsmediatags = require("jsmediatags");
+const ID3 = require('ID3');
 
 const server = http.createServer();
 
 server.on('request', (request, response) => {
-    // // 设置允许跨域
-    // response.setHeader('Access-Control-Allow-Origin', '*');    // 访问控制允许来源：所有
-    // response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, If-Modified-Since, Range');    // 访问控制允许报头 X-Requested-With: xhr请求, 同时允许JS MediaTags分片读取文件
-    // response.setHeader('Access-Control-Allow-Metheds', 'PUT, POST, GET, DELETE, OPTIONS');    // 访问控制允许方法
-    // response.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range');    // 允许访问JS MediaTags分片读取文件
     response.setHeader('X-Powered-By', 'nodejs v10.15.3');    // 自定义头信息，表示服务端用nodejs
 
     // 获取请求的URL信息
@@ -28,8 +24,33 @@ server.on('request', (request, response) => {
     // 拿到该请求资源的绝对路径
     let urlName = path.join(__dirname, pathName);
 
-
     switch(true){
+        // 请求mp3文件的封面图片
+        case /^\/album\/.*\.mp3/.test(pathName):
+            let reg = /.*\/([^\/\.]*\.mp3)$/;
+            let musicTitle = reg.exec(pathName)[1];
+            urlName = 'http://127.0.0.1/public/music/' + encodeURIComponent(musicTitle);
+            ID3.loadTags(urlName, () => {
+                let tags = ID3.getAllTags(urlName);
+
+                let image = tags.album;
+                if (!image) {
+                    let base64String = String.fromCharCode(image);
+                    let base64 = "data:" + image.format + ";base64," + window.btoa(base64String);
+                    response.end(base64);
+                } else {
+                    fs.readFile(path.join(__dirname, '/public/images/defaultCover.jpg'), (err, data) => {
+                        if(err){
+                            response.end('404 Not Found!');
+                            return;
+                        }
+                
+                        response.end(data);
+                    })
+                }
+            })
+            break;
+
         // 请求主页
         case /^\/index$/.test(pathName):
         case /^\/index\.html$/.test(pathName):
@@ -49,8 +70,8 @@ server.on('request', (request, response) => {
                 if(err){
                     console.log('One request hasn\'t been recorded!');
                 }
-            })
-        
+            })           
+
         // 其他资源均采用默认urlName路径访问
         default:
             // 设置jsonp跨域访问：url?query=filepath&callback=function

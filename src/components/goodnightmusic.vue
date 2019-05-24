@@ -25,6 +25,26 @@
                         <div class="iconBox">
                             <img :src="iconSrc" @click="switchNext" alt="Next" class="next">
                         </div>
+                        <div class="iconBox" @mouseover="setVolume1 = true" @mouseout="setVolume1 = false">
+                            <img :src="iconSrc" alt="volume" class="volume">
+                        </div>
+                        <div class="volume" v-show="setVolume1 || setVolume2" 
+                        @mouseover="setVolume2 = true" 
+                        @mouseout="setVolume2 = false" 
+                        @mousedown="setVolume">
+                            <div class="unsetted" 
+                            :style="{width: '10px', 
+                            height: (160 - parseFloat(setted)) + 'px',
+                            'background-color': '#333', 
+                            'padding-top': '5px', 
+                            'border-radius': '5px 5px 0 0'}"></div>
+                            <div class="setted" 
+                            :style="{width: '10px', 
+                            height: setted, 
+                            'background-color': '#eee', 
+                            'padding-bottom': '5px', 
+                            'border-radius': '0 0 5px 5px'}"></div>
+                        </div>
                     </div>
                 </div>
                 <audio :src="musicSrc" preload loop ref="player">
@@ -48,8 +68,13 @@ export default {
             musicTitle: '',
             musicArtist: '',
             musicDescription: '',
+
+            // 控制音量调节器的显示
+            setted: '80px',
+            setVolume1: false,
+            setVolume2: false,
             
-            imgSrc: '/public/images/defaultCover.jpg',
+            imgSrc: '',
             iconSrc: '/public/icon/playerIcon.png',
             musicList: []
         }
@@ -71,7 +96,9 @@ export default {
             this.musicArtist = musicInfo[2];
             this.musicDate = selected.date;
             this.musicSrc = selected.url;
+            this.imgSrc = '/album/' + musicInfo[1] + ' - ' + musicInfo[2] + '.mp3';
             this.musicDescription = selected.description || "音乐伴孤独，一曲解忧愁。";
+            this.$refs.player.volume = parseInt(this.setted) / 160;
         },
         switchPrev: function(){
             this.nextInfo = '';
@@ -123,8 +150,28 @@ export default {
                 this.state = 'play';
                 this.$refs.player.pause();
             }
+        },
+        setVolume: function(e){
+            let topLength = e.layerY;
+            if(e.layerY <= 10){
+                topLength = 0;
+            }
+            if(e.layerY >= 170){
+                topLength = 170;
+            }
+            
+            this.setted = (170 - topLength) + 'px';
+            this.$refs.player.volume = (170 - topLength) / 160;
+            document.onmousemove = (e) => {
+                topLength = e.layerY;
+                this.setted = (170 - topLength) + 'px';
+                this.$refs.player.volume = (170 - topLength) / 160;
+            }
+            document.onmouseup = () => {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
         }
-
     },
     created: function(){
         ajax('GET', '/public/music.json', (xmlhttp) => {
@@ -249,6 +296,7 @@ div.main div.right div.player div.artist{
 }
 
 div.main div.right div.player div.icons{
+    position: relative;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -280,5 +328,23 @@ div.main div.right div.player div.icons div.iconBox img.prev{
 
 div.main div.right div.player div.icons div.iconBox img.next{
     margin-left: -240px;
+}
+
+div.main div.right div.player div.icons div.iconBox img.volume{
+    margin-left: -320px;
+}
+
+div.main div.right div.player div.icons div.volume{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 350px;
+    top: -180px;
+    width: 40px;
+    height: 160px;
+    padding: 10px 0;
+    /* background-color: yellow; */
 }
 </style>
