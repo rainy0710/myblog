@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const jsmediatags = require("jsmediatags");
 const NodeID3 = require('node-id3')
+const readFileList = require('./src/lib/readFileList.js')
 
 const server = http.createServer();
 
@@ -25,6 +26,13 @@ server.on('request', (request, response) => {
     let urlName = path.join(__dirname, pathName);
 
     switch(true){
+        // 请求TikTok Video中的视频文件列表
+        case /\/videoList/.test(pathName):
+            urlName = path.join(__dirname, '/public/video');
+            let fileList = readFileList(urlName);
+            response.end(JSON.stringify(fileList));
+            break;
+
         // 请求mp3文件的封面图片
         case /^\/album\/.*\.mp3/.test(pathName):
             let reg = /.*\/([^\/\.]*\.mp3)$/;
@@ -34,7 +42,7 @@ server.on('request', (request, response) => {
                 if(err){
                     fs.readFile(path.join(__dirname, '/public/images/defaultCover.jpg'), (err, data) => {
                         if(err){
-                            response.end('404 Not Found!');
+                            response.end('Can\'t read the defaultCover.jpg!');
                             return;
                         }
                 
@@ -97,7 +105,7 @@ server.on('request', (request, response) => {
             }
             fs.readFile(urlName, (err, data) => {
                 if(err){
-                    response.end('404 Not Found!');
+                    response.end('Can\'t read the file client requested!');
                     return;
                 }
 
