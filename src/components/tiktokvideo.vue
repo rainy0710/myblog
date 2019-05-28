@@ -86,7 +86,7 @@ div.video_list{
     position: relative;
     width: 90%;
     margin: 0 auto;
-    overflow: hidden;
+    /* overflow: hidden; */
     /* background-color: yellow; */
 }
 
@@ -97,7 +97,15 @@ div.video_list div.videoBox{
     width: 225px;
     height: 400px;
     overflow: hidden;
-    background-color: black;
+    box-shadow: 0 0 5px 0px #000;
+    border-radius: 10px;
+    background-color: #111;
+    transition: all 0.3s ease;
+}
+
+div.video_list div.videoBox:hover{
+    box-shadow: 15px 15px 10px 0px #000;
+    transform: scale(1.05, 1.05);
 }
 
 div.video_list div.videoBox video{
