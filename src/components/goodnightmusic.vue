@@ -178,6 +178,16 @@ export default {
             this.musicList = JSON.parse(xmlhttp.responseText);
             this.selectMusic();
         })
+    },
+    mounted: function(){
+        let that = this;
+        window.onhashchange = function(){
+            if(that.$refs.player.play){
+                console.log('Turn off the music player.');
+                that.state = 'play';
+                that.$refs.player.pause();
+            }
+        }
     }
 }
 </script>

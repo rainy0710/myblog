@@ -6,11 +6,11 @@
             <span class="line"></span>
         </div>
         <div class="video_list" :style="{height: contentHeight}" ref="mainContent">
-            <div class="videoBox" v-for="(item, index) in videoList" v-bind:key="index" 
-            v-bind:style="{left: 285 * (index % numInLine) + 'px', top: 450 * Math.floor(index / numInLine) + 'px'}"
-            @click="videoPlay">
+            <router-link class="videoBox" :to="'/videoplay?url=/public/video/' + item.name" tag="div"
+            v-for="(item, index) in videoList" v-bind:key="index" 
+            v-bind:style="{left: 285 * (index % numInLine) + 'px', top: 450 * Math.floor(index / numInLine) + 'px'}">
                 <video :src="'/public/video/' + item.name"></video>
-            </div>
+            </router-link>
         </div>
         <div class="bottom_line">
             <p>我是个有底线的网站！</p>
@@ -18,19 +18,19 @@
     </div>
 </template>
 <script>
+import Vue from "vue"
+import VueRouter from "vue-router"
+Vue.use(VueRouter);
 export default {
     data: function(){
         return {
             videoList: [],
             contentHeight: '800px',
             numInLine: 5,
-            playClass: 'pause'
+            playClass: 'pause',
         }
     },
     methods: {
-        videoPlay: function(){
-            
-        }
 
     },
     created: function(){
