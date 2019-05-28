@@ -182,8 +182,7 @@ export default {
     mounted: function(){
         let that = this;
         window.onhashchange = function(){
-            if(that.$refs.player.play){
-                console.log('Turn off the music player.');
+            if(!that.$refs.player.paused){
                 that.state = 'play';
                 that.$refs.player.pause();
             }
