@@ -53,7 +53,7 @@ export default {
                 }, 500);
             }, 8000);
         }, (xmlhttp) => {
-            console.log('404 Resource Not Found!');
+            console.log('Failed to get the images.json!');
         });
     }
 }
