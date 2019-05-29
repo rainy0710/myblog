@@ -26,9 +26,9 @@ export default {
     data: function(){
         return {
             videoList: [],
-            contentHeight: '800px',
+            contentHeight: '0px',
             numInLine: 5,
-            playClass: 'pause',
+            playClass: 'pause'
         }
     },
     methods: {
@@ -65,11 +65,7 @@ export default {
                 if(that.$refs.mainContent.offsetTop + that.$refs.mainContent.clientHeight <= (document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop) + window.innerHeight){
                     that.hotLoad();
                 }
-                // console.log(that.$refs.mainContent.offsetTop);
-                // console.log(document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop);
             }
-            // this.videoList = this.$store.state.videoList;
-            // this.contentHeight = Math.ceil((this.videoList.length) / this.numInLine) * 450 + 'px';
         }, (xmlhttp) => {
             console.error('Can\'t get the TikTok video list from server.');
         })
@@ -160,4 +156,6 @@ div.bottom_line p{
     color: #aaa;
     font-size: 16px;
 }
+
+
 </style>
