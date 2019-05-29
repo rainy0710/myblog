@@ -6,11 +6,11 @@
             <span class="line"></span>
         </div>
         <div class="video_list" :style="{height: contentHeight}" ref="mainContent">
-            <div class="videoBox" @click="hashChange(item.name)"
+            <router-link class="videoBox" :to="'/videoplay?url=/public/video/' + item.name" tag="div"
             v-for="(item, index) in videoList" v-bind:key="index" 
             v-bind:style="{left: 285 * (index % numInLine) + 'px', top: 450 * Math.floor(index / numInLine) + 'px'}">
                 <img :src="'/poster/' + item.name" alt="图片获取失败！">
-            </div>
+            </router-link>
         </div>
         <div class="bottom_line">
             <p>我是个有底线的网站！</p>
@@ -32,9 +32,6 @@ export default {
         }
     },
     methods: {
-        hashChange: function(name){
-            window.location.hash = '/videoplay?url=/public/video/' + name;
-        },
         hotLoad: function(){
             if(this.videoList.length === this.$store.state.videoList.length){
                 window.onscroll = function(){

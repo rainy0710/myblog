@@ -19,6 +19,9 @@ export default {
             window.location.hash = '/';
         }
     },
+    created: function(){
+        window.location.hash = window.location.hash + '&turnoff=music';
+    },
     mounted: function(){
         this.videoSrc = this.$route.query.url;
         if(!this.videoSrc){
