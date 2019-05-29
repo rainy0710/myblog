@@ -3,7 +3,9 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const jsmediatags = require("jsmediatags");
-const NodeID3 = require('node-id3')
+const NodeID3 = require('node-id3');
+const readFileList = require('./src/lib/readFileList.js');
+const ffmpeg = require('fluent-ffmpeg');
 
 const server = http.createServer();
 
@@ -25,6 +27,36 @@ server.on('request', (request, response) => {
     let urlName = path.join(__dirname, pathName);
 
     switch(true){
+        // 请求Tik-Tok中视频的封面
+        case /^\/poster\/[^\/\.]*\.mp4$/.test(pathName):
+            let regMp4 = /^\/poster\/(([^\/\.]*)\.mp4)$/.exec(pathName);
+            let fileName = regMp4[1];
+            new ffmpeg(path.join(__dirname, '/public/video/' + fileName)).screenshots({
+                timemarks: ['1'],
+                count: 1,
+                filename: regMp4[2],
+                folder: 'public/poster',
+                // size: '320x240'
+            }).on('end', function() {
+                urlName = path.join(__dirname, 'public/poster/' + regMp4[2] + '.png');
+                fs.readFile(urlName, (err, data) => {
+                    if(err){
+                        response.end('Can\'t read the poster image of tik-tok video!');
+                        return;
+                    }
+            
+                    response.end(data);
+                })
+            });
+            break;
+
+        // 请求TikTok Video中的视频文件列表
+        case /\/videoList/.test(pathName):
+            urlName = path.join(__dirname, '/public/video');
+            let fileList = readFileList(urlName);
+            response.end(JSON.stringify(fileList));
+            break;
+
         // 请求mp3文件的封面图片
         case /^\/album\/.*\.mp3/.test(pathName):
             let reg = /.*\/([^\/\.]*\.mp3)$/;
@@ -34,7 +66,7 @@ server.on('request', (request, response) => {
                 if(err){
                     fs.readFile(path.join(__dirname, '/public/images/defaultCover.jpg'), (err, data) => {
                         if(err){
-                            response.end('404 Not Found!');
+                            response.end('Can\'t read the defaultCover.jpg!');
                             return;
                         }
                 
@@ -95,9 +127,10 @@ server.on('request', (request, response) => {
             if('query' in paras && 'callback' in paras){
                 urlName = path.join(__dirname, unescape(paras['query']));
             }
+
             fs.readFile(urlName, (err, data) => {
                 if(err){
-                    response.end('404 Not Found!');
+                    response.end('Can\'t read the file client requested!');
                     return;
                 }
 

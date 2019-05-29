@@ -48,6 +48,11 @@ function rAjax(method, url, success, error, paraObj = {}, timeout = 3000){
 
     // 修改参数格式
     paraStr = robj2str(paraObj);
+
+    // 对url进行处理，因为ajax会自动补全url开头的'/'，所以先去除双'/'开头的情况，然后再进行编码
+    if(url.indexOf('/') === 0){
+        url = url.substring(1);
+    }
     url = encodeURIComponent(url);
     
     method = method.toUpperCase();

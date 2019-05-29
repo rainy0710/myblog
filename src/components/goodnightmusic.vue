@@ -51,6 +51,33 @@
                     <source type="audio/mp3">
                 </audio>
             </div>
+            <div class="music_list" :class="styleConvert">
+                <div class="icon_box" v-show="!listshow">
+                    <img :src="iconSrc" class="list_button" title="Play List" alt="Play List" @click="listshow = true; styleConvert = 'back';">
+                </div>
+                <transition name="list">
+                    <div class="play_list" v-show="listshow">
+                        <div class="direct">
+                            <span>日期</span>
+                            <span>歌曲名</span>
+                        </div>
+                        <div class="hide_scroll">
+                            <div class="list_box">
+                                <div class="item" v-for="(item,index) in musicList" :key="index" 
+                                :style="{backgroundColor: itemBgc[index]}"
+                                @click="switchSelected(index)">
+                                    <span>{{ item.date }}</span>
+                                    <span>{{ (/\/public\/music\/(.*)\s-\s(.*)\.mp3$/.exec(item.url))[1] }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="icon_box">
+                            <img :src="iconSrc" class="back_button" title="Go Back" alt="Go Back" @click="listshow = false; styleConvert = 'front';">
+                        </div>
+                    </div>
+                </transition>
+
+            </div>
         </div>
     </diV>
 </template>
@@ -59,7 +86,7 @@ export default {
     data: function(){
         return {
             selectedNum: 0,
-            state: '',
+            state: 'play',
             prevInfo: '已切换至第一首',
             nextInfo: '',
 
@@ -76,7 +103,10 @@ export default {
             
             imgSrc: '',
             iconSrc: '/public/icon/playerIcon.png',
-            musicList: []
+            musicList: [],
+            listshow: false,
+            itemBgc: [],
+            styleConvert: 'front'
         }
     },
     methods: {
@@ -89,7 +119,7 @@ export default {
 
             // 根据音乐文件的url提取出音乐名和歌手名
             let selected = this.musicList[this.selectedNum];
-            let reg = /.*\/([^-\/\.]*)\s-\s([^-\/\.]*)\.mp3$/;
+            let reg = /.*\/([^-\/\.]*)\s-\s([^-\/]*)\.mp3$/;
             let musicInfo = reg.exec(selected.url);
             
             this.musicTitle = musicInfo[1];
@@ -165,19 +195,78 @@ export default {
             document.onmousemove = (e) => {
                 topLength = e.layerY;
                 this.setted = (170 - topLength) + 'px';
-                this.$refs.player.volume = (170 - topLength) / 160;
+                this.$refs.player.volume = (170 - topLength) / 160;  
             }
             document.onmouseup = () => {
                 document.onmousemove = null;
                 document.onmouseup = null;
             }
+        },
+        getItemBgc: function(){
+            // 渲染播放列表各表项的背景色
+            let arrTemp = [];
+            for(let i = 0; i < this.musicList.length; i ++){
+                if(i === this.selectedNum){
+                    arrTemp[i] = 'rgb(162, 189, 66)';
+                    continue;
+                }
+
+                if(i % 2 === 0){
+                    arrTemp[i] = '#bbb';
+                }else{
+                    arrTemp[i] = '#999';
+                }
+            }
+            this.itemBgc = arrTemp;
+        },
+        switchSelected: function(index){
+            // 在播放列表选中新的歌曲后切换播放曲目
+            if(index === this.selectedNum){
+                if(this.$refs.player.paused){
+                    this.state = 'pause';
+                    setTimeout(() => {
+                        this.$refs.player.play();
+                    }, 500);
+                }
+
+                this.listshow = false;
+                this.styleConvert = 'front';
+                return;
+            }
+            
+            if(!this.$refs.player.paused){
+                this.$refs.player.pause();
+            }else{
+                this.state = 'pause';
+            }
+            this.selectedNum = index;
+            this.getItemBgc();
+            this.selectMusic();
+
+            this.$refs.player.load();
+            setTimeout(() => {
+                this.$refs.player.play();
+            }, 500);
+
+            this.listshow = false;
+            this.styleConvert = 'front';
         }
     },
     created: function(){
         ajax('GET', '/public/music.json', (xmlhttp) => {
             this.musicList = JSON.parse(xmlhttp.responseText);
             this.selectMusic();
+            this.getItemBgc();
         })
+    },
+    mounted: function(){
+        let that = this;
+        window.onhashchange = function(){
+            if(!that.$refs.player.paused){
+                that.state = 'play';
+                that.$refs.player.pause();
+            }
+        }
     }
 }
 </script>
@@ -205,7 +294,7 @@ div.title span.centerTitle{
 div.title span.line{
     display: inline-block;
     width: 30%;
-    border-top: 1px solid #222;
+    border-top: 1px solid rgb(171, 201, 65);
 }
 
 div.main{
@@ -265,7 +354,7 @@ div.main div.right>img.pause{
         transform: rotate(0deg);
     }
     to{
-        transform: rotate(-360deg);
+        transform: rotate(360deg);
     }
 }
 
@@ -316,18 +405,22 @@ div.main div.right div.player div.icons div.iconBox img{
 
 div.main div.right div.player div.icons div.iconBox img.play{
     margin-left: 0;
+    cursor: pointer;
 }
 
 div.main div.right div.player div.icons div.iconBox img.pause{
     margin-left: -80px;
+    cursor: pointer;
 }
 
 div.main div.right div.player div.icons div.iconBox img.prev{
     margin-left: -160px;
+    cursor: pointer;
 }
 
 div.main div.right div.player div.icons div.iconBox img.next{
     margin-left: -240px;
+    cursor: pointer;
 }
 
 div.main div.right div.player div.icons div.iconBox img.volume{
@@ -347,4 +440,149 @@ div.main div.right div.player div.icons div.volume{
     padding: 10px 0;
     /* background-color: yellow; */
 }
+
+div.main div.music_list.front{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+div.main div.music_list.back{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    right: 0;
+    bottom: 0;
+}
+
+
+div.main div.music_list>div.icon_box{
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    /* background-color: blue; */
+}
+
+div.main div.music_list div.icon_box img{
+    height: 100%;
+    width: auto;
+    margin-left: -180px;
+    cursor: pointer;
+}
+
+div.main div.music_list div.play_list{
+    width: 100%;
+    height: 400px;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    font-family: "Arial", "Microsoft YaHei";
+    overflow: hidden;
+    background-color: rgb(26, 65, 75);
+}
+
+div.main div.music_list div.play_list div.direct{
+    font-size: 18px;
+    color: #bbb;
+}
+
+div.main div.music_list div.play_list div.direct span:nth-child(1){
+    display: inline-block;
+    width: 120px;
+    text-align: center;
+}
+
+div.main div.music_list div.play_list div.direct span:nth-child(2){
+    display: inline-block;
+    padding-left: 30px;
+}
+
+div.main div.music_list div.play_list div.hide_scroll{
+    width: 90%;
+    height: 80%;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+div.main div.music_list div.play_list div.hide_scroll div.list_box{
+    width: 110%;
+    height: 100%;
+    color: rgb(53, 49, 49);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: #bbb;
+}
+
+div.main div.music_list div.play_list div.hide_scroll div.list_box div.item{
+    width: 100%;
+    height: 24px;
+    cursor: pointer;
+}
+
+div.main div.music_list div.play_list div.hide_scroll div.list_box div.item span{
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+}
+
+div.main div.music_list div.play_list div.hide_scroll div.list_box div.item span:nth-child(1){
+    width: 120px;
+    text-align: center;
+}
+
+div.main div.music_list div.play_list div.icon_box{
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    /* background-color: blue; */
+}
+
+div.main div.music_list div.play_list div.icon_box img{
+    height: 100%;
+    width: auto;
+    margin-left: -216px;
+    cursor: pointer;
+}
+
+.list-enter,
+.list-leave-to{
+    transform: translateX(100%);
+}
+
+.list-enter-active{
+    animation: listEnter 0.5s ease;
+}
+
+.list-enter-to,
+.list-leave{
+    transform: translateX(0);
+}
+
+.list-leave-active{
+    animation: listLeave 0.5s ease;
+}
+
+@keyframes listEnter{
+    from{
+        transform: translateX(100%);
+    }
+    to{
+        transform: translateX(0);
+    }
+}
+
+@keyframes listLeave{
+    from{
+        transform: translateX(0);
+    }
+    to{
+        transform: translateX(100%);
+    }
+}
+
 </style>
