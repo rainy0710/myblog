@@ -1,5 +1,5 @@
 <template>
-    <div class="video_player" ref="mainbox" v-bind:style="{width: boxWidth, height: boxHeight}" @click=" window.location.hash = '/'; ">
+    <div class="video_player" ref="mainbox" v-bind:style="{width: boxWidth, height: boxHeight}" @click="hashRecover">
         <video controls ref="videoObj" @click.stop="">
             <source :src="videoSrc" type="video/mp4" />
         </video>
@@ -14,7 +14,11 @@ export default {
             videoSrc: ''
         }
     },
-    methods: {},
+    methods: {
+        hashRecover: function(){
+            window.location.hash = '/';
+        }
+    },
     mounted: function(){
         this.videoSrc = this.$route.query.url;
         if(!this.videoSrc){

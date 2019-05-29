@@ -9,7 +9,7 @@
             <div class="videoBox" @click="hashChange(item.name)"
             v-for="(item, index) in videoList" v-bind:key="index" 
             v-bind:style="{left: 285 * (index % numInLine) + 'px', top: 450 * Math.floor(index / numInLine) + 'px'}">
-                <video :src="'/public/video/' + item.name"></video>
+                <img :src="'/poster/' + item.name" alt="图片获取失败！">
             </div>
         </div>
         <div class="bottom_line">
@@ -33,6 +33,9 @@ export default {
     methods: {
         hashChange: function(name){
             window.location.hash = '/videoplay?url=/public/video/' + name;
+        },
+        hotLoad: function(){
+
         }
     },
     created: function(){
@@ -110,7 +113,7 @@ div.video_list div.videoBox:hover{
     transform: scale(1.05, 1.05);
 }
 
-div.video_list div.videoBox video{
+div.video_list div.videoBox img{
     width: 100%;
     height: auto;
 }
