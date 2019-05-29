@@ -28,10 +28,6 @@ export default {
         }
         this.$refs.videoObj.play();
         this.$refs.videoObj.volume = 0.5;
-        window.onscroll = function(){
-            window.location.hash = '/';
-            window.onscroll = null;
-        }
     }
 }
 </script>

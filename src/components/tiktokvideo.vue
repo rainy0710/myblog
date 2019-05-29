@@ -20,6 +20,7 @@
 <script>
 import Vue from "vue"
 import VueRouter from "vue-router"
+
 Vue.use(VueRouter);
 export default {
     data: function(){
@@ -35,14 +36,40 @@ export default {
             window.location.hash = '/videoplay?url=/public/video/' + name;
         },
         hotLoad: function(){
-
+            if(this.videoList.length === this.$store.state.videoList.length){
+                window.onscroll = function(){
+                    if(window.location.hash !== '/'){
+                        window.location.hash = '/';
+                    }
+                }
+                return;
+            }
+            let arrTemp = [];
+            for(let i = 0; i < 15 && (this.videoList.length + i) < this.$store.state.videoList.length; i ++){
+                arrTemp.push(this.$store.state.videoList[this.videoList.length + i]);
+            }
+            this.videoList = this.videoList.concat(arrTemp);
+            this.contentHeight = Math.ceil((this.videoList.length) / this.numInLine) * 450 + 'px';
         }
     },
     created: function(){
+        let that = this;
         ajax('GET', '/videoList', (xmlhttp) => {
             this.$store.commit('setState', xmlhttp.responseText);
-            this.videoList = this.$store.state.videoList;
-            this.contentHeight = Math.ceil((this.videoList.length + 1) / this.numInLine) * 450 + 'px'
+            window.onscroll = function(){
+                if(window.location.hash !== '/'){
+                    window.location.hash = '/';
+                }
+
+                // 检查当前滚动条高度是否需要热加载
+                if(that.$refs.mainContent.offsetTop + that.$refs.mainContent.clientHeight <= (document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop) + window.innerHeight){
+                    that.hotLoad();
+                }
+                // console.log(that.$refs.mainContent.offsetTop);
+                // console.log(document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop);
+            }
+            // this.videoList = this.$store.state.videoList;
+            // this.contentHeight = Math.ceil((this.videoList.length) / this.numInLine) * 450 + 'px';
         }, (xmlhttp) => {
             console.error('Can\'t get the TikTok video list from server.');
         })
@@ -60,7 +87,7 @@ export default {
 </script>
 <style scoped>
 div#tiktok-video{
-    position: relative;
+    /* position: relative; */
     width: 100%;
     margin-top: 60px;
     background-color: #333;
@@ -128,7 +155,8 @@ div.bottom_line{
 }
 
 div.bottom_line p{
-    height: 50px;
+    height: 80px;
+    line-height: 40px;
     color: #aaa;
     font-size: 16px;
 }
