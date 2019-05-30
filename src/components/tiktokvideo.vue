@@ -82,7 +82,6 @@ export default {
 div#tiktok-video{
     /* position: relative; */
     width: 100%;
-    margin-top: 60px;
     background-color: #333;
 }
 

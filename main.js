@@ -2,10 +2,11 @@ const http = require('http');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
-const jsmediatags = require("jsmediatags");
 const NodeID3 = require('node-id3');
 const readFileList = require('./src/lib/readFileList.js');
 const ffmpeg = require('fluent-ffmpeg');
+const template = require('art-template');
+const readBigFile = require('./src/lib/readBigFile.js');
 
 const server = http.createServer();
 
@@ -99,6 +100,40 @@ server.on('request', (request, response) => {
             })
 
             break;
+
+        // 请求BTMovie的页面
+        case /^\/btmovie\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
+            let regMovie = /^\/btmovie\/(([^\.\/]*)\.[a-zA-Z0-9]*)$/;
+            let regResult = regMovie.exec(pathName);
+
+            // 通过请求的URL获取请求电影的名称
+            let name = regResult[2];
+            // 通过请求的URL获取电影视频资源的URL
+            urlName = '/public/movie/' + regResult[1];
+
+            // 读取HTML模板字符串
+            fs.readFile(path.join(__dirname, '/src/templates/movie.html'), function(err, data){
+                if(err){
+                    response.end("404 Not found the movie.html resource!");
+                    return;
+                }
+
+                // 将指定电影的名称和链接插入到模板引擎中
+                let ret = template.render(data.toString(),{
+                    name: name,
+                    url: urlName
+                })
+
+                response.end(ret);
+            })
+            break;
+
+        // 请求视频文件资源
+        case /^\/public\/movie\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
+        case /^\/public\/video\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
+            readBigFile(path.join(__dirname, pathName), request, response);
+            break;
+
 
         // 请求主页
         case /^\/index$/.test(pathName):
