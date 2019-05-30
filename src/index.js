@@ -11,11 +11,15 @@ global.ajax = rAjax;
 Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
+        boxWidth: 0,
         videoList: []
     },
     mutations: {
-        setState: function(state, jsonData){
+        setJson: function(state, jsonData){
             state.videoList = JSON.parse(jsonData);
+        },
+        setWidth: function(state, newData){
+            state.boxWidth = newData;
         }
     }
 })

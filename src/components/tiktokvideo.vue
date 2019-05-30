@@ -52,7 +52,7 @@ export default {
     created: function(){
         let that = this;
         ajax('GET', '/videoList', (xmlhttp) => {
-            this.$store.commit('setState', xmlhttp.responseText);
+            this.$store.commit('setJson', xmlhttp.responseText);
             window.onscroll = function(){
                 if(window.location.hash !== '/'){
                     window.location.hash = '/';
@@ -74,6 +74,7 @@ export default {
         window.onresize = function(){
             that.numInLine = Math.floor((that.$refs.mainContent.offsetWidth + 60) / 285);
             that.contentHeight = Math.ceil((that.videoList.length + 1) / that.numInLine) * 450 + 'px';
+            that.$store.commit('setWidth', window.innerWidth);
         };
     }
 }

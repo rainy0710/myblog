@@ -121,7 +121,9 @@ server.on('request', (request, response) => {
                 // 将指定电影的名称和链接插入到模板引擎中
                 let ret = template.render(data.toString(),{
                     name: name,
-                    url: urlName
+                    url: urlName,
+                    age: paras['age'],
+                    rate: paras['rate']
                 })
 
                 response.end(ret);

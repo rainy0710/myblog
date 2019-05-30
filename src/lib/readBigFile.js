@@ -11,7 +11,7 @@ function readBigFile(filename, request, response) {
     fs.exists(filename, function(exists) {
         if (!filename || !exists) {
             response.writeHead(404);
-            response.end();
+            response.end('Can\'t find the indicated file!');
             return;
         }
         
