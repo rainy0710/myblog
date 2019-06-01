@@ -253,11 +253,14 @@ export default {
         }
     },
     created: function(){
-        ajax('GET', '/public/music.json', (xmlhttp) => {
-            this.musicList = JSON.parse(xmlhttp.responseText);
-            this.selectMusic();
-            this.getItemBgc();
-        })
+        let getJsonWait = setInterval(() => {
+            if(this.$store.state.jsonObj.music){
+                this.musicList = this.$store.state.jsonObj.music;
+                this.selectMusic();
+                this.getItemBgc();
+                clearInterval(getJsonWait);
+            }
+        }, 300);
     },
     mounted: function(){
         let that = this;
@@ -275,6 +278,7 @@ div#good-night-music{
     position: relative;
     width: 100%;
     height: 500px;
+    margin-bottom: 80px;
 }
 
 div.title{

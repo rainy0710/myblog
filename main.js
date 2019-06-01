@@ -2,10 +2,11 @@ const http = require('http');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
-const jsmediatags = require("jsmediatags");
 const NodeID3 = require('node-id3');
 const readFileList = require('./src/lib/readFileList.js');
 const ffmpeg = require('fluent-ffmpeg');
+const template = require('art-template');
+const readBigFile = require('./src/lib/readBigFile.js');
 
 const server = http.createServer();
 
@@ -35,10 +36,10 @@ server.on('request', (request, response) => {
                 timemarks: ['1'],
                 count: 1,
                 filename: regMp4[2],
-                folder: 'public/poster',
+                folder: 'public/videocover',
                 // size: '320x240'
             }).on('end', function() {
-                urlName = path.join(__dirname, 'public/poster/' + regMp4[2] + '.png');
+                urlName = path.join(__dirname, 'public/videocover/' + regMp4[2] + '.png');
                 fs.readFile(urlName, (err, data) => {
                     if(err){
                         response.end('Can\'t read the poster image of tik-tok video!');
@@ -100,6 +101,62 @@ server.on('request', (request, response) => {
 
             break;
 
+        // 请求BTMovie的页面
+        case /^\/btmovie\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
+            let regMovie = /^\/btmovie\/(([^\.\/]*)\.[a-zA-Z0-9]*)$/;
+            let regResult = regMovie.exec(pathName);
+
+            // 通过请求的URL获取请求电影的名称
+            let name = regResult[2];
+            // 通过请求的URL获取电影视频资源的URL
+            urlName = '/public/movie/' + regResult[1];
+
+            // 读取HTML模板字符串
+            fs.readFile(path.join(__dirname, '/src/templates/movie.html'), function(err, templateData){
+                if(err){
+                    response.end("404 Not found the movie.html resource!");
+                    return;
+                }
+
+                // 将指定电影的名称和链接等信息插入到模板引擎中
+                fs.readFile(path.join(__dirname, '/public/data.json'), function(err, jsonData){
+                    if(err){
+                        response.end('404 Not found the movie.json resource!');
+                        return;
+                    }
+                    let movieArr = JSON.parse(jsonData).movie;
+                    movieArr.forEach((item) => {
+                        if(item.name !== name){
+                            return;
+                        }
+
+                        let ret = template.render(templateData.toString(),{
+                            name: item.name,
+                            age: item.age,
+                            rate: item.rate,
+                            director: item.director,
+                            category: item.category,
+                            region: item.region,
+                            posterSrc: '/public/poster/' + item.poster,
+                            url: '/public/movie/' + name + '.mp4',
+                            introduction: item.introduction,
+                        })
+                        
+
+                        response.end(ret);
+                    })
+
+                })
+            })
+            break;
+
+        // 请求视频流文件资源
+        case /^\/public\/movie\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
+        case /^\/public\/video\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
+            readBigFile(path.join(__dirname, pathName), request, response);
+            break;
+
+
         // 请求主页
         case /^\/index$/.test(pathName):
         case /^\/index\.html$/.test(pathName):
@@ -119,7 +176,7 @@ server.on('request', (request, response) => {
                 if(err){
                     console.log('One request hasn\'t been recorded!');
                 }
-            })           
+            })          
 
         // 其他资源均采用默认urlName路径访问
         default:

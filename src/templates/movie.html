@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ name }}</title>
+        <meta charset="utf-8" />
+        <style>
+            *{
+                border: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            body{
+                background-color: #222;
+            }
+
+            div.box{
+                width: 100%;
+                background: #222 url('{{ posterSrc }}') center center no-repeat;
+                background-size: contain;
+                position: fixed;
+                z-index: -10;
+            }
+
+            div.title{
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                width: 75%;
+                margin: 0 auto;
+            }
+
+            div.title span:nth-child(1){
+                color: #eee;
+                text-shadow: 0px 0px 20px #333;
+                font-size: 45px;
+                line-height: 100px;
+                font-family: "Arial", "Microsoft YaHei";
+            }
+
+            div.title span:nth-child(2){
+                color: rgb(151, 185, 55);
+                font-size: 40px;
+                line-height: 75px;
+                text-shadow: 0px 0px 1px #666;
+                font-family: "Bell MT", "Harlow Solid Italic", "Arial";
+            }
+
+            div.scroll{
+                width: 100%;
+                padding: 20px 0;
+                background-color: #ddd;
+            }
+
+            div.content{
+                width: 75%;
+                margin: 0 auto;
+            }
+
+            div.content video{
+                width: 100%;
+                height: auto;
+                background-color: black;
+            }
+
+            div.content p.title{
+                height: 35px;
+                line-height: 35px;
+                font-size: 24px;
+                font-weight: bolder;
+                color: #333;
+                font-family: "Arial", "Microsoft YaHei";
+                margin-top: 20px;
+            }
+
+            div.content p.detail{
+                font-size: 16px;
+                color: #222;
+                font-family: "Arial", "Microsoft YaHei";
+                line-height: 30px;
+                margin-top: 10px;
+            }
+
+            p.notice{
+                padding-top: 100px;
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="box"></div>
+        <div class="title">
+            <span>{{ name }}</span>
+            <span>{{ rate }}</span>
+        </div>
+        <div class="scroll">
+            <div class="content">
+                <video src="{{ url }}" controls></video>
+                <p class="title">{{ name }} ({{ age }})</p>
+                <p class="detail">导演：{{ director }}<br />上映时间：{{ age }}<br />类型：{{ category }}<br />地区：{{ region }}<br />简介：{{ introduction }}</p>
+                <p class="notice">
+                    * 特别声明：本资源仅供学习和交流，请勿用于任何商业用途，如有侵权，还望提前告知下架，谢谢！
+                </p>
+            </div>
+
+        </div>
+
+        
+        <script>
+            // 根据浏览器显示窗口高度动态调节盒子高度
+            let imgBox = document.querySelector('div.box');
+            let titleBox = document.querySelector('div.title');
+            let windowHeight = window.innerHeight;
+            titleBox.style.height = windowHeight + 'px';
+            imgBox.style.height = windowHeight + 'px';
+            window.onresize = function(){
+                windowHeight = window.innerHeight;
+                titleBox.style.height = windowHeight + 'px';
+                imgBox.style.height = windowHeight + 'px';
+                imgBox.style.filter = 'blur(' + (15 * (document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop) / windowHeight) + 'px)'
+            }
+
+
+            // 根据滚动条位置动态调节海报图片模糊化效果
+            let blurTemp = 0; // 定义一个变量临时存储模糊值以减小频繁设置模糊值带来的性能压力
+            window.onscroll = () => {
+                let scrollHeight = (document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop);
+                if(scrollHeight > windowHeight){
+                    return;
+                }
+
+                if(blurTemp !== Math.round(15 * scrollHeight / windowHeight)){
+                    blurTemp = Math.round(15 * scrollHeight / windowHeight);
+                    imgBox.style.filter = 'blur(' + blurTemp + 'px)';
+                }
+            }
+        </script>
+    </body>
+</html>

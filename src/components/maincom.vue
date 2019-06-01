@@ -2,6 +2,7 @@
     <div id="main">
         <my-album></my-album>
         <good-night-music></good-night-music>
+        <bt-movie></bt-movie>
         <tiktok-video></tiktok-video>
         <router-view></router-view>
     </div>
@@ -12,6 +13,7 @@ import Vue from 'vue'
 // 组件引入时最好使用相对路径
 import myAlbum from './myalbum.vue'
 import goodNightMusic from './goodnightmusic.vue'
+import btMovie from './btmovie.vue'
 import tiktokVideo from './tiktokvideo.vue'
 
 
@@ -24,9 +26,7 @@ Vue.use(VueRouter);
 
 export default {
     data: () => {
-        return {
-            msg: '这是main组件中的data数据'
-        }
+        return {}
     },
 
     methods: {
@@ -36,6 +36,7 @@ export default {
     components: {
         'my-album': myAlbum,
         'good-night-music': goodNightMusic,
+        'bt-movie': btMovie,
         'tiktok-video': tiktokVideo
     },
 

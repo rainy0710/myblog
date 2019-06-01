@@ -7,7 +7,7 @@
         </div>
         <div class="video_list" :style="{height: contentHeight}" ref="mainContent">
             <router-link class="videoBox" :to="'/videoplay?url=/public/video/' + item.name" tag="div"
-            v-for="(item, index) in videoList" v-bind:key="index" 
+            v-for="(item, index) in loadedList" v-bind:key="index" 
             v-bind:style="{left: 285 * (index % numInLine) + 'px', top: 450 * Math.floor(index / numInLine) + 'px'}">
                 <img :src="'/poster/' + item.name" alt="图片获取失败！">
             </router-link>
@@ -25,6 +25,7 @@ Vue.use(VueRouter);
 export default {
     data: function(){
         return {
+            loadedList: [],
             videoList: [],
             contentHeight: '0px',
             numInLine: 5,
@@ -33,7 +34,8 @@ export default {
     },
     methods: {
         hotLoad: function(){
-            if(this.videoList.length === this.$store.state.videoList.length){
+            // 如果全部加载完毕则清楚热加载事件
+            if(this.loadedList.length === this.videoList.length){
                 window.onscroll = function(){
                     if(window.location.hash !== '/'){
                         window.location.hash = '/';
@@ -42,17 +44,17 @@ export default {
                 return;
             }
             let arrTemp = [];
-            for(let i = 0; i < 15 && (this.videoList.length + i) < this.$store.state.videoList.length; i ++){
-                arrTemp.push(this.$store.state.videoList[this.videoList.length + i]);
+            for(let i = 0; i < 15 && (this.loadedList.length + i) < this.videoList.length; i ++){
+                arrTemp.push(this.videoList[this.loadedList.length + i]);
             }
-            this.videoList = this.videoList.concat(arrTemp);
-            this.contentHeight = Math.ceil((this.videoList.length) / this.numInLine) * 450 + 'px';
+            this.loadedList = this.loadedList.concat(arrTemp);
+            this.contentHeight = Math.ceil((this.loadedList.length) / this.numInLine) * 450 + 'px';
         }
     },
     created: function(){
         let that = this;
         ajax('GET', '/videoList', (xmlhttp) => {
-            this.$store.commit('setState', xmlhttp.responseText);
+            this.videoList = JSON.parse(xmlhttp.responseText);
             window.onscroll = function(){
                 if(window.location.hash !== '/'){
                     window.location.hash = '/';
@@ -73,7 +75,7 @@ export default {
         // chrome不支持div标签的onresize事件，因此可以间接利用window对象的onresize事件
         window.onresize = function(){
             that.numInLine = Math.floor((that.$refs.mainContent.offsetWidth + 60) / 285);
-            that.contentHeight = Math.ceil((that.videoList.length + 1) / that.numInLine) * 450 + 'px';
+            that.contentHeight = Math.ceil((that.loadedList.length + 1) / that.numInLine) * 450 + 'px';
         };
     }
 }
@@ -82,7 +84,6 @@ export default {
 div#tiktok-video{
     /* position: relative; */
     width: 100%;
-    margin-top: 60px;
     background-color: #333;
 }
 
