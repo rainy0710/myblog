@@ -36,10 +36,10 @@ server.on('request', (request, response) => {
                 timemarks: ['1'],
                 count: 1,
                 filename: regMp4[2],
-                folder: 'public/poster',
+                folder: 'public/videocover',
                 // size: '320x240'
             }).on('end', function() {
-                urlName = path.join(__dirname, 'public/poster/' + regMp4[2] + '.png');
+                urlName = path.join(__dirname, 'public/videocover/' + regMp4[2] + '.png');
                 fs.readFile(urlName, (err, data) => {
                     if(err){
                         response.end('Can\'t read the poster image of tik-tok video!');
@@ -112,21 +112,41 @@ server.on('request', (request, response) => {
             urlName = '/public/movie/' + regResult[1];
 
             // 读取HTML模板字符串
-            fs.readFile(path.join(__dirname, '/src/templates/movie.html'), function(err, data){
+            fs.readFile(path.join(__dirname, '/src/templates/movie.html'), function(err, templateData){
                 if(err){
                     response.end("404 Not found the movie.html resource!");
                     return;
                 }
 
-                // 将指定电影的名称和链接插入到模板引擎中
-                let ret = template.render(data.toString(),{
-                    name: name,
-                    url: urlName,
-                    age: paras['age'],
-                    rate: paras['rate']
-                })
+                // 将指定电影的名称和链接等信息插入到模板引擎中
+                fs.readFile(path.join(__dirname, '/public/movie.json'), function(err, jsonData){
+                    if(err){
+                        response.end('404 Not found the movie.json resource!');
+                        return;
+                    }
+                    let movieArr = JSON.parse(jsonData);
+                    movieArr.forEach((item) => {
+                        if(item.name !== name){
+                            return;
+                        }
 
-                response.end(ret);
+                        let ret = template.render(templateData.toString(),{
+                            name: item.name,
+                            age: item.age,
+                            rate: item.rate,
+                            director: item.director,
+                            category: item.category,
+                            region: item.region,
+                            // abstract: item.abstract,
+                            posterSrc: './public/poster/' + item.poster,
+                            url: '/public/movie/' + name + '.mp4'
+                        })
+                        
+
+                        response.end(ret);
+                    })
+
+                })
             })
             break;
 

@@ -24,7 +24,7 @@ export default {
     methods: {
         // 获取a标签的跳转链接，后台视频链接接口为：/btmovie/movie.mp4?age=2019&rate=10
         getMovieUrl: function(item){
-            return '/btmovie/' + item.name + '.mp4?age=' + item.age + '&rate=' + item.rate;
+            return '/btmovie/' + item.name + '.mp4';
         },
         mouseOn: function(e){
             e.target.setAttribute('class', 'selected');
@@ -87,8 +87,9 @@ div.movie_list li{
 }
 
 div.movie_list li a{
-    font-size: 24px;
+    font-size: 26px;
     font-family: "Microsoft JhengHei", "Arial Unicode MS", "Bell MT", "Arial", "Microsoft YaHei", "";
+    font-weight: bold;
     text-decoration: none;
     transition: all 0.5s ease;
     box-sizing: border-box;
@@ -102,7 +103,7 @@ div.movie_list li a.selected{
 
 div.movie_list li a.unselected{
     color: #333;
-    text-shadow: 0 0 2px #333;
+    text-shadow: 0 0 1px #333;
 }
 
 </style>
