@@ -5,8 +5,4 @@ node_modules
 pinglog
 public/video
 public/movie
-<<<<<<< HEAD
-public/poster
-=======
 public/videocover
->>>>>>> dev
