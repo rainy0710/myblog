@@ -294,7 +294,7 @@ div.title span.centerTitle{
 div.title span.line{
     display: inline-block;
     width: 30%;
-    border-top: 1px solid rgb(171, 201, 65);
+    border-top: 1px solid #444;
 }
 
 div.main{
