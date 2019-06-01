@@ -4,5 +4,5 @@ node_modules
 .git
 pinglog
 public/video
-public/videocover
 public/movie
+public/videocover
