@@ -11,13 +11,13 @@
             }
 
             body{
-                background-color: #333;
+                background-color: #222;
             }
 
             div.box{
                 width: 100%;
-                background: #ddd url('{{ posterSrc }}') 0  0 no-repeat;
-                background-size: cover;
+                background: #222 url('{{ posterSrc }}') center center no-repeat;
+                background-size: contain;
                 position: fixed;
                 z-index: -10;
             }
@@ -80,6 +80,11 @@
                 line-height: 30px;
                 margin-top: 10px;
             }
+
+            p.notice{
+                padding-top: 100px;
+                color: red;
+            }
         </style>
     </head>
     <body>
@@ -92,8 +97,12 @@
             <div class="content">
                 <video src="{{ url }}" controls></video>
                 <p class="title">{{ name }} ({{ age }})</p>
-                <p class="detail">导演：{{ director }}<br />上映时间：{{ age }}<br />类型：{{ category }}<br />地区：{{ region }}<br />简介：</p>
+                <p class="detail">导演：{{ director }}<br />上映时间：{{ age }}<br />类型：{{ category }}<br />地区：{{ region }}<br />简介：{{ introduction }}</p>
+                <p class="notice">
+                    * 特别声明：本资源仅供学习和交流，请勿用于任何商业用途，如有侵权，还望提前告知下架，谢谢！
+                </p>
             </div>
+
         </div>
 
         
@@ -111,9 +120,10 @@
                 imgBox.style.filter = 'blur(' + (15 * (document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop) / windowHeight) + 'px)'
             }
 
+
             // 根据滚动条位置动态调节海报图片模糊化效果
             let blurTemp = 0; // 定义一个变量临时存储模糊值以减小频繁设置模糊值带来的性能压力
-            window.onscroll = function(){
+            window.onscroll = () => {
                 let scrollHeight = (document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop);
                 if(scrollHeight > windowHeight){
                     return;
@@ -124,8 +134,6 @@
                     imgBox.style.filter = 'blur(' + blurTemp + 'px)';
                 }
             }
-
-
         </script>
     </body>
 </html>

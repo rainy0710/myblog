@@ -11,15 +11,14 @@ global.ajax = rAjax;
 Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
-        boxWidth: 0,
-        videoList: []
+        // 使用jsonObj存储来自good-night-music、照片墙和BT-Movie的数据，存储为{music:[], images:[], movie:[]}的形式
+        jsonObj: {
+            test: "这是测试数据"
+        }
     },
     mutations: {
         setJson: function(state, jsonData){
-            state.videoList = JSON.parse(jsonData);
-        },
-        setWidth: function(state, newData){
-            state.boxWidth = newData;
+            state.jsonObj = JSON.parse(jsonData);
         }
     }
 })
@@ -34,6 +33,13 @@ let app =new Vue({
     },
     components: {
         'main-com': maincom
+    },
+    created: function(){
+        ajax("GET", '/public/data.json', (xmlhttp) => {
+            this.$store.commit('setJson', xmlhttp.responseText);
+        }, (xmlhttp) => {
+            console.log("Error when request json data from the http server.");
+        })
     },
     store: store
 })

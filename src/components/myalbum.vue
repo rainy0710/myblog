@@ -26,35 +26,40 @@ export default {
         }
     },
     methods: {},
-    mounted: function(){    
-        ajax('GET', '/public/images.json', (xmlhttp) => {
-            let json = xmlhttp.responseText;
+    mounted: function(){
+        let getJsonWait = setInterval(() => {
+            if(this.$store.state.jsonObj.images){
+                // 控制照片墙动画的开始
+                this.aniControl = true;
 
-            this.aniControl = true;
-            this.images = JSON.parse(json);
-            if(this.images.length <= 0){
-                console.log('Can\'t get the images.json data.');
-                return;
+                // 从vuex中提取出照片数据信息
+                this.images = this.$store.state.jsonObj.images;
+                if(this.images.length <= 0){
+                    console.log('Can\'t get the images.json data.');
+                    return;
+                }
+
+                // 设计照片墙照片切换以触发动画效果
+                this.imgNum = Math.floor(Math.random() * this.images.length);
+                this.imgSrc = '/public/images/' + this.imgNum + '.jpg';
+                this.imgTitle = this.images[this.imgNum].imgTitle;
+                let imgTimer = setInterval(() => {
+                    this.aniControl = false;
+                    this.imgNum = Math.floor(Math.random() * this.images.length)
+
+                    setTimeout(() => {
+                        this.imgTitle = this.images[this.imgNum].imgTitle;
+                        this.imgSrc = '/public/images/' + this.imgNum + '.jpg';
+                        this.$refs.img.onload = () => {
+                            this.aniControl = true;
+                        }
+                    }, 500);
+                }, 8000);
+
+                // 清除循环等待定时器
+                clearInterval(getJsonWait);
             }
-
-            this.imgNum = Math.floor(Math.random() * this.images.length);
-            this.imgSrc = '/public/images/' + this.imgNum + '.jpg';
-            this.imgTitle = this.images[this.imgNum].imgTitle;
-            let imgTimer = setInterval(() => {
-                this.aniControl = false;
-                this.imgNum = Math.floor(Math.random() * this.images.length)
-
-                setTimeout(() => {
-                    this.imgTitle = this.images[this.imgNum].imgTitle;
-                    this.imgSrc = '/public/images/' + this.imgNum + '.jpg';
-                    this.$refs.img.onload = () => {
-                        this.aniControl = true;
-                    }
-                }, 500);
-            }, 8000);
-        }, (xmlhttp) => {
-            console.log('Failed to get the images.json!');
-        });
+        }, 300);
     }
 }
 </script>

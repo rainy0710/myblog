@@ -34,11 +34,12 @@ export default {
         }
     },
     created: function(){
-        ajax('GET', '/public/movie.json', (xmlhttp) => {
-            this.movieList = JSON.parse(xmlhttp.responseText);
-        }, (xmlhttp) => {
-            console.log('404 Not found the movie.json file.');
-        })
+        let getJsonWait = setInterval(() => {
+            if(this.$store.state.jsonObj.movie){
+                this.movieList = this.$store.state.jsonObj.movie;
+                clearInterval(getJsonWait);
+            }
+        }, 300);
     }
 }
 </script>

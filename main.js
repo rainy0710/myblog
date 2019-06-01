@@ -119,12 +119,12 @@ server.on('request', (request, response) => {
                 }
 
                 // 将指定电影的名称和链接等信息插入到模板引擎中
-                fs.readFile(path.join(__dirname, '/public/movie.json'), function(err, jsonData){
+                fs.readFile(path.join(__dirname, '/public/data.json'), function(err, jsonData){
                     if(err){
                         response.end('404 Not found the movie.json resource!');
                         return;
                     }
-                    let movieArr = JSON.parse(jsonData);
+                    let movieArr = JSON.parse(jsonData).movie;
                     movieArr.forEach((item) => {
                         if(item.name !== name){
                             return;
@@ -137,9 +137,9 @@ server.on('request', (request, response) => {
                             director: item.director,
                             category: item.category,
                             region: item.region,
-                            // abstract: item.abstract,
-                            posterSrc: './public/poster/' + item.poster,
-                            url: '/public/movie/' + name + '.mp4'
+                            posterSrc: '/public/poster/' + item.poster,
+                            url: '/public/movie/' + name + '.mp4',
+                            introduction: item.introduction,
                         })
                         
 
@@ -150,7 +150,7 @@ server.on('request', (request, response) => {
             })
             break;
 
-        // 请求视频文件资源
+        // 请求视频流文件资源
         case /^\/public\/movie\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
         case /^\/public\/video\/[^\.\/]*\.[a-zA-Z0-9]*$/.test(pathName):
             readBigFile(path.join(__dirname, pathName), request, response);
@@ -176,7 +176,7 @@ server.on('request', (request, response) => {
                 if(err){
                     console.log('One request hasn\'t been recorded!');
                 }
-            })           
+            })          
 
         // 其他资源均采用默认urlName路径访问
         default:
