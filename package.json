@@ -18,10 +18,7 @@
   },
   "homepage": "https://github.com/rainy0710/myblog#readme",
   "dependencies": {
-<<<<<<< HEAD
-=======
     "art-template": "^4.13.2",
->>>>>>> dev
     "fluent-ffmpeg": "^2.1.2",
     "jsmediatags": "^3.8.1",
     "node-id3": "^0.1.7",
