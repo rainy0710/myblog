@@ -95,7 +95,8 @@
         </div>
         <div class="scroll">
             <div class="content">
-                <video src="{{ url }}" controls></video>
+                <!-- 通过controlslist属性隐藏视频标签的下载按钮 -->
+                <video src="{{ url }}" controls controlslist="nodownload"></video>
                 <p class="title">{{ name }} ({{ age }})</p>
                 <p class="detail">导演：{{ director }}<br />上映时间：{{ age }}<br />类型：{{ category }}<br />地区：{{ region }}<br />简介：{{ introduction }}</p>
                 <p class="notice">
