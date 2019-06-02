@@ -1,6 +1,11 @@
 {
     "music": [
         {
+            "date": "2019-6-1",
+            "url": "/public/music/めざせポケモンマスター (20th Anniversary) - 松本梨香.mp3",
+            "description": "一个成功的IP是什么，就是它在荧幕上叫两声“皮卡皮卡”就可以换来台下一阵欢呼......"
+        },
+        {
             "date": "2019-5-31",
             "url": "/public/music/彩虹 - 上海彩虹室内合唱团.mp3",
             "description": ""

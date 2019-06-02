@@ -391,6 +391,7 @@ div.main div.right div.player div.artist{
 div.main div.right div.player div.icons{
     position: relative;
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
 }
