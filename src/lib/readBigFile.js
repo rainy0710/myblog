@@ -6,6 +6,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 function readBigFile(filename, request, response) {
     fs.exists(filename, function(exists) {
@@ -20,6 +21,16 @@ function readBigFile(filename, request, response) {
         let fileSize = stat.size;
         // 获取HTTP请求头部的range信息
         let range = request.headers.range;
+        // 获取视频的格式
+        let contentType = '';
+        let extName = path.extname(filename);
+        switch(extName.toLowerCase()){
+            case ".mp4":
+                contentType = "video/mpeg4";
+                break;
+            default:
+                contentType = "video/mpeg4";
+        }
 
         
         if (range) {
@@ -28,7 +39,7 @@ function readBigFile(filename, request, response) {
             let parts = range.replace(/bytes=/, "").split("-");
             let start = parseInt(parts[0], 10);
             // 默认按10mB分段
-            let end = parts[1] ? parseInt(parts[1], 10) : start + 10000000; 
+            let end = parts[1] ? parseInt(parts[1], 10) : start + 15000000; 
     
             // 如果自定义的end大于了文件大小则以文件大小为准
             end = end > fileSize - 1 ? fileSize - 1 : end;
@@ -39,7 +50,7 @@ function readBigFile(filename, request, response) {
                 'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                 'Accept-Ranges': 'bytes',
                 'Content-Length': chunksize,
-                'Content-Type': 'video/mpeg4',
+                'Content-Type': contentType,
             };
             response.writeHead(206, head);
             file.pipe(response);
