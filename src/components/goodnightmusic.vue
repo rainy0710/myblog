@@ -305,6 +305,7 @@ div.main{
     position: relative;
     width: 100%;
     height: 400px;
+    overflow: hidden;
 }
 
 div.main div.left{
