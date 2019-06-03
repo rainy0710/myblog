@@ -60,43 +60,58 @@ server.on('request', (request, response) => {
 
         // 请求mp3文件的封面图片
         case /^\/album\/.*\.mp3/.test(pathName):
-            let reg = /.*\/([^\/\.]*\.mp3)$/;
+            let reg = /.*\/([^\/]*\.mp3)$/;
             let musicTitle = reg.exec(pathName)[1];
             urlName = path.join(__dirname, '/public/music/' + musicTitle);
             NodeID3.read(urlName, function(err, tags) {
                 if(err){
-                    fs.readFile(path.join(__dirname, '/public/images/defaultCover.jpg'), (err, data) => {
+                    // 未找到urlName对应的音乐文件
+
+                    fs.readFile(path.join(__dirname, '/public/images/defaultMusicCover.jpg'), (err, imgData) => {
                         if(err){
-                            response.end('Can\'t read the defaultCover.jpg!');
+                            response.end('Can\'t read the default music cover image!');
                             return;
                         }
                 
-                        response.end(data);
+                        response.end(imgData);
                     })
                 }else{
-                    response.end(tags.image.imageBuffer);
-                }
+                    if(tags.image){
+                        response.end(tags.image.imageBuffer);
+                        /*
+                            tags: {
+                            title: "Tomorrow",
+                            artist: "Kevin Penkin",
+                            image: {
+                                mime: "jpeg",
+                                type: {
+                                id: 3,
+                                name: "front cover"
+                                },
+                                description: String,
+                                imageBuffer: Buffer
+                            },
+                            raw: {
+                                TIT2: "Tomorrow",
+                                TPE1: "Kevin Penkin",
+                                APIC: Object (See above)
+                            }
+                            }
+                        */
+                    }else{
+                        // 请求的mp3文件中未集成专辑封面
 
-                /*
-                tags: {
-                  title: "Tomorrow",
-                  artist: "Kevin Penkin",
-                  image: {
-                    mime: "jpeg",
-                    type: {
-                      id: 3,
-                      name: "front cover"
-                    },
-                    description: String,
-                    imageBuffer: Buffer
-                  },
-                  raw: {
-                    TIT2: "Tomorrow",
-                    TPE1: "Kevin Penkin",
-                    APIC: Object (See above)
-                  }
+                        fs.readFile(path.join(__dirname, '/public/images/defaultMusicCover.jpg'), (err, imgData) => {
+                            if(err){
+                                response.end('Can\'t read the default music cover image!');
+                                return;
+                            }
+
+                            response.end(imgData);
+                        })
+                    }
+                    
                 }
-                */
             })
 
             break;

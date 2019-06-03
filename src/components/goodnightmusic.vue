@@ -119,7 +119,7 @@ export default {
 
             // 根据音乐文件的url提取出音乐名和歌手名
             let selected = this.musicList[this.selectedNum];
-            let reg = /.*\/([^-\/\.]*)\s-\s([^-\/]*)\.mp3$/;
+            let reg = /.*\/([^\/]*)\s-\s([^\/]*)\.mp3$/;
             let musicInfo = reg.exec(selected.url);
             
             this.musicTitle = musicInfo[1];
