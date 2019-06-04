@@ -59,7 +59,7 @@ function readBigFile(filename, request, response) {
                 'Content-Length': fileSize,
                 'Content-Type': 'video/mpeg4',
             };
-            res.writeHead(200, head);
+            response.writeHead(200, head);
             fs.createReadStream(filename).pipe(response);
         }
     });
