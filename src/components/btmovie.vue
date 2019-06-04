@@ -8,7 +8,7 @@
         <div class="movie_list">
             <ul>
                 <li v-for="(item, index) in movieList" :key="index">
-                    <a :href="getMovieUrl(item)" class="unselected" @mouseover="mouseOn" @mouseout="mouseOut">{{ item.name }}</a>
+                    <a :href="getMovieUrl(item)" class="unselected line-limit-length" @mouseover="mouseOn" @mouseout="mouseOut">{{ item.name }}</a>
                 </li>
             </ul>
         </div>
@@ -27,10 +27,10 @@ export default {
             return '/btmovie/' + item.name + '.mp4';
         },
         mouseOn: function(e){
-            e.target.setAttribute('class', 'selected');
+            e.target.setAttribute('class', 'selected line-limit-length');
         },
         mouseOut: function(e){
-            e.target.setAttribute('class', 'unselected');
+            e.target.setAttribute('class', 'unselected line-limit-length');
         }
     },
     created: function(){
@@ -105,6 +105,13 @@ div.movie_list li a.selected{
 div.movie_list li a.unselected{
     color: #333;
     text-shadow: 0 0 1px #333;
+}
+
+/* 设置文本内容超出容器部分以省略号显示 */
+.line-limit-length{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 </style>
