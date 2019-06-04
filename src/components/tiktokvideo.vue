@@ -9,7 +9,7 @@
             <router-link class="videoBox" :to="'/videoplay?url=/public/video/' + item.name" tag="div"
             v-for="(item, index) in loadedList" v-bind:key="index" 
             v-bind:style="{left: 285 * (index % numInLine) + 'px', top: 450 * Math.floor(index / numInLine) + 'px'}">
-                <img :src="'/poster/' + item.name" alt="图片获取失败！">
+                <img :src="'/poster/' + item.name" alt="图片获取失败！" @click="recordBrowsed">
             </router-link>
         </div>
         <div class="bottom_line">
@@ -49,6 +49,10 @@ export default {
             }
             this.loadedList = this.loadedList.concat(arrTemp);
             this.contentHeight = Math.ceil((this.loadedList.length) / this.numInLine) * 450 + 'px';
+        },
+        recordBrowsed: function(e){
+            // 用户点击过的视频界面变半透明以作提示
+            e.target.className = "browsed";
         }
     },
     created: function(){
@@ -137,6 +141,10 @@ div.video_list div.videoBox:hover{
 div.video_list div.videoBox img{
     width: 100%;
     height: auto;
+}
+
+div.video_list div.videoBox img.browsed{
+    opacity: 0.3;
 }
 
 div.bottom_line{
