@@ -1,6 +1,11 @@
 {
     "music": [
         {
+            "date": "2019-6-4",
+            "url": "/public/music/Try - Asher Monroe.mp3",
+            "description": "笑见未闻声渐悄，多情却为无情恼。"
+        },
+        {
             "date": "2019-6-3",
             "url": "/public/music/十七岁 - 刘德华.mp3",
             "description": "学士服是租的，毕业照是被安排的，毕设论文是抄的，答辩是水的，三方是骗就业率的……一切都是虚假的，只有时间是真的，六月过了就没了......"
