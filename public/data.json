@@ -1,6 +1,11 @@
 {
     "music": [
         {
+            "date": "2019-6-6",
+            "url": "/public/music/想着你 - 郭顶.mp3",
+            "description": "孤独不是与生俱来，而是同你一起闯入我的世界。"
+        },
+        {
             "date": "2019-6-5",
             "url": "/public/music/分分钟需要你 - 安可少女.mp3",
             "description": "有的歌你想唱给全世界，有的歌你想唱给一个人。"
