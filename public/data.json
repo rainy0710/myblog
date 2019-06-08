@@ -1,6 +1,11 @@
 {
     "music": [
         {
+            "date": "2019-6-8",
+            "url": "/public/music/Battles and Wastelands - Neo Retros.mp3",
+            "description": "美好的事情，莫过于，拿得起，放得下......"
+        },
+        {
             "date": "2019-6-7",
             "url": "/public/music/If I Didn't Have You (Bernadette's Song - Jim Parsons,Simon Helberg.mp3",
             "description": "世界上最美丽的巧合莫过于，我爸遇到了我妈，你爸遇到了你妈，然后我还能遇到你......"
