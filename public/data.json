@@ -1,6 +1,11 @@
 {
     "music": [
         {
+            "date": "2019-6-9",
+            "url": "/public/music/Zombie - The Cranberries.mp3",
+            "description": "在和平年代中，儿子埋葬父亲。但是在战争中，父母埋葬儿子。战场上每个人都是输家，唯有权力永垂不朽。"
+        },
+        {
             "date": "2019-6-8",
             "url": "/public/music/Battles and Wastelands - Neo Retros.mp3",
             "description": "美好的事情，莫过于，拿得起，放得下......"
