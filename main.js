@@ -29,8 +29,8 @@ server.on('request', (request, response) => {
 
     switch(true){
         // 请求Tik-Tok中视频的封面
-        case /^\/poster\/[^\/\.]*\.mp4$/.test(pathName):
-            let regMp4 = /^\/poster\/(([^\/\.]*)\.mp4)$/.exec(pathName);
+        case /^\/poster\/[^\/\.]*\.mp4$/.test(pathName.toLowerCase()):
+            let regMp4 = /^\/poster\/(([^\/\.]*)\.mp4)$/.exec(pathName.toLowerCase());
             let fileName = regMp4[1];
             new ffmpeg(path.join(__dirname, '/public/video/' + fileName)).screenshots({
                 timemarks: ['1'],
