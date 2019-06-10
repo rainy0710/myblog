@@ -37,7 +37,7 @@ server.on('request', (request, response) => {
                 count: 1,
                 filename: regMp4[2],
                 folder: 'public/videocover',
-                size: '20%'
+                size: '35%'
             }).on('end', function() {
                 urlName = path.join(__dirname, 'public/videocover/' + regMp4[2] + '.png');
                 fs.readFile(urlName, (err, data) => {
